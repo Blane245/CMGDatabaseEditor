@@ -1,0 +1,295 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+:root {
+  --layout-background-color: lightgray;
+  --header-background-color:white;
+  --header-text-color: black;
+  --body--background-color:white;
+  --body-text-color: black;
+  --edit-background-color: white;
+  --edit-header-background-color: green;
+  --edit-body-background-color: white;
+  --edit-footer-background-color: white;
+  --edit-header-text-color: white;
+  --edit-body-text-color: black;
+  --edit-footer-text-color: black;
+  --footer-background-color: white;
+  --footer-text-color: black;
+  --add-background-color: green;
+  --add-text-color: white;
+  --modify-background-color: blue;
+  --modify-text-color: black;
+  --delete-background-color: red;
+  --delete-text-color: white;
+  --list-background-color: yellow;
+  --list-text-color: black;
+  --large-font-size: 24pt;
+  --small-font-size: 12pt;
+  --error-background-color: red;
+  --info-background-color: white;
+  --error-text-color: white;
+  --info-info-color: black;
+  --yes-background-color: green;
+  --yes-text-color: white;
+  --no-background-color: red;
+  --no-text-color: white;
+  --submit-background-color:green;
+  --submit-text-color: white;
+  --ok-background-color:green;
+  --ok-text-color: white;
+  --cancel-background-color:red;
+  --cancel-text-color: white;
+  --modal-background-color: white;
+  --modal-header-background-color: green;
+  --modal-header-color: white;
+  --modal-body-background-color: white;
+  --modal-body-color: black;
+  --modal-footer-background-color: green;
+  --modal-footer-color: white;
+}
+.layout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  background-color: var(--layout-background-color);
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  display: grid;
+  grid-template-rows: 80px 1fr 40px;
+  grid-template-areas:
+    "header"
+    "body"
+    "footer";
+  .header {
+    background-color: var(--header-background-color);
+    color: var(--header-text-color);
+    position: absolute;
+    grid-area: header;
+    margin: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    grid-template-areas: "icon title .";
+    gap: 0;
+    .icon {
+      grid-area: icon;
+    }
+    .title {
+      grid-area: title;
+      text-align: center;
+      font-size: 30pt;
+      font-weight: bold;
+    }
+  }
+  .body {
+    display: grid;
+    grid-area: body;
+    grid-template-columns: 400px 1fr 400px;
+    grid-template-areas: "sequence edit tag";
+    gap: 0;
+    width: 100%;
+    height: 100%;
+    .sequence {
+      display: block;
+      grid-area: sequence;
+    }
+    .edit {
+      display: grid;
+      width: 50%;
+      grid-area: edit;
+      grid-template-rows: 100px 1fr 50px;
+      grid-template-areas:
+        "edit-header"
+        "edit-body"
+        "edit-footer";
+      text-align: center;
+      align-self: center;
+      background-color: var(--edit-background-color);
+      border: black;
+      border-width: 2px;
+      .edit-header {
+        grid-area: edit-header;
+        display: block;
+        width:100%;
+        text-align: left;
+        background-color: var(--edit-header-background-color);
+        color: var(--edit-header-text-color);
+      }
+      .edit-body {
+        grid-area: edit-body;
+        display: block;
+        width:100%;
+        height: 75%;
+        text-align: left;
+        background-color: var(--edit-body-background-color);
+        color: var(--edit-body-text-color);
+    overflow: auto;
+    overflow-x: hidden;
+      }
+      .edit-footer {
+        grid-area: edit-footer;
+        display: block;
+        text-align: left;
+        width: 100%;
+        top: auto;
+        left: 0;
+        bottom: 0;
+        background-color: var(--edit-footer-background-color);
+        color: var(--edit-footer-text-color);
+      }
+    }
+    .tag {
+      display: block;
+      grid-area: tag;
+    overflow: auto;
+    overflow-x: hidden;
+    }
+  }
+  .footer {
+    display: block;
+    grid-area: footer;
+    background-color: var(--footer-background-color);
+    color: var(--footer-text-color);
+    position: fixed;
+    width: 100%;
+    top: auto;
+    left: 0;
+    bottom: 0;
+    font-size: 16pt;
+    text-align: left;
+  }
+}
+.addbutton {
+  background-color: var(--add-background-color);
+  color: var(--add-text-color);
+  font-size: var(--small-font-size);
+}
+.editbutton {
+  background-color: var(--modify-background-color);
+  color: var(--modify-text-color);
+  background-color: lightgreen;
+  font-size: var(--small-font-size);
+}
+.deletebutton {
+  background-color: var(--delete-background-color);
+  color: var(--delete-text-color);
+  font-size: var(--small-font-size);
+}
+.listbutton {
+  background-color: var(--list-background-color);
+  color: var(--list-text-color);
+  font-size: var(--small-font-size);
+}
+.yesbutton {
+  background-color: var(--yes-background-color);
+  color: var(--yes-text-color);
+  font-size: var(--large-font-size);
+}
+.nobutton {
+  background-color: var(--no-background-color);
+  color: var(--no-text-color);
+  font-size: var(--large-font-size);
+}
+.okbutton {
+  background-color: var(--ok-background-color);
+  color: var(--ok-text-color);
+  font-size: var(--small-font-size);
+}
+.submitbutton {
+  background-color: var(--submit-background-color);
+  color: var(--submit-text-color);
+  font-size: var(--small-font-size);
+}
+.cancelbutton {
+  background-color: var(--cancel-background-color);
+  color: var(--cancel-text-color);
+  font-size: var(--small-font-size);
+}
+.errormessage {
+  background-color: var(--error-background-color);
+  color: var(--error-text-color);
+  font-size: var(--large-font-size);
+}
+.infomessage {
+  background-color: var(--info-background-color);
+  color: var(--info-text-color);
+  font-size: var(--large-font-size);
+}
+label {
+  font-size: var(--small-font-size);
+}
+input {
+  font-size: var(--small-font-size);
+}
+textarea {
+  font-size: var(--small-font-size);
+}
+div {
+  font-size: var(--small-font-size);
+}
+h1 {
+  font-size: var(--large-font-size);
+}
+p {
+  font-size: var(--small-font-size);
+  margin: 0;
+}
+
+.modal {
+  position: absolute;
+  display: grid;
+  left: 700px;
+  top: 100px;
+  z-index: 10;
+  background-color: var(--modal-background-color);
+  margin: 0;
+  padding: 0;
+  border: 1px solid #888;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+  grid-template-rows: 50px 1fr 50px;
+  grid-template-areas:
+    "modal-header"
+    "modal-body"
+    "modal-footer";
+  .modal-header {
+    display: block;
+    grid-area: modal-header;
+  background-color: var(--modal-header-background-color);
+  color: var(--modal-header-text-color);
+  font-size: var(--large-font-size);
+    text-align: center;
+  }
+  .modal-body {
+    display: block;
+    grid-area: modal-body;
+  background-color: var(--modal-body-background-color);
+  color: var(--modal-body-text-color);
+  font-size: var(--small-font-size);
+    text-align: left;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+  .modal-footer {
+    display: block;
+    grid-area: modal-footer;
+  background-color: var(--modal-footer-background-color);
+  color: var(--modal-footer-text-color);
+  font-size: var(--large-font-size);
+    width: 100%;
+    top: auto;
+    left: 0;
+    bottom: 0;
+  }
+}
