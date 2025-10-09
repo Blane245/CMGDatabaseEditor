@@ -1,36 +1,37 @@
-import { useEffect, useState } from "react";
+import "App.css";
+import { useState } from "react";
+import Body from "sections/body";
+import Header from "sections/header";
 import {
+  Attribute,
   DbErrorType,
   DbResponseType,
   MessageType,
   RESPONSETYPE,
 } from "./types";
-import "./App.css";
-import Header from "./sections/header";
-import Tags from "./sections/tags";
-import NoteSequenceDialog from "./sections/notesequencedialog";
-import NoteSequences from "./sections/notesequences";
-import Body from "./sections/body";
 
 function App() {
   const [message, setMessage] = useState<MessageType>({
     type: RESPONSETYPE.error,
     message: "",
   });
-  const [mode, setMode] = useState<string>("");
   const [dbResponse, setDbResponse] = useState<DbResponseType>({
     type: RESPONSETYPE.error,
     message: "",
   } as DbErrorType);
-  const [showEdit, setShowEdit] = useState<boolean>(false);
+  const [sequenceType, setSequenceType] = useState<Attribute>(Attribute.none);
 
   return (
     <div className="layout">
       <div className="header">
-        <Header name={import.meta.env.NAME} version={import.meta.env.VERSION} />
+        <Header 
+        setSequenceType={setSequenceType}
+        name={import.meta.env.NAME} 
+        version={import.meta.env.VERSION} />
       </div>
       <div className="body">
         <Body
+        sequenceType={sequenceType}
           setMessage={setMessage}
           dbResponse={dbResponse}
           setDbResponse={setDbResponse}

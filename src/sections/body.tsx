@@ -1,29 +1,37 @@
-import { type Connection } from "mysql2";
-import { JSX, useState } from "react"
-import Tags from "./tags";
-import NoteSequences from "./notesequences";
-import { DbResponseType } from "types";
+import { JSX } from "react";
+import Sequences from "sections/sequences";
+import Tags from "sections/tags";
+import { Attribute, DbResponseType } from "types";
 
 interface BodyProps {
+  sequenceType: Attribute;
     setMessage: Function;
     dbResponse:DbResponseType;
     setDbResponse: Function;
 }
 export default function Body (props: BodyProps): JSX.Element {
-    const {setMessage, setDbResponse, dbResponse} = props;
+    const {sequenceType, setMessage, setDbResponse, dbResponse} = props;
     return (
         <>
-            <NoteSequences 
+        {sequenceType != Attribute.none? 
+        <>
+            <Sequences 
+            sequenceType={sequenceType}
             setMessage={setMessage}
             setDbResponse={setDbResponse}
             dbResponse={dbResponse}
             />
-          <div className="tag">
-            <Tags setMessage={setMessage}
+            {/* TODO move to Sequences */}
+          {/* <div className="tag">
+            <Tags 
+            sequenceType={sequenceType}
+            setMessage={setMessage}
             setDbResponse={setDbResponse}
             dbResponse={dbResponse}
             />
-          </div>
+          </div> */}
+          </>
+        : null}
         </>
     )
 }

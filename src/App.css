@@ -7,9 +7,11 @@
 
 :root {
   --layout-background-color: lightgray;
-  --header-background-color:white;
+  --header-background-color: white;
   --header-text-color: black;
-  --body--background-color:white;
+  --menu-background-color: green;
+  --menu-text-color: white;
+  --body--background-color: white;
   --body-text-color: black;
   --edit-background-color: white;
   --edit-header-background-color: green;
@@ -26,8 +28,14 @@
   --modify-text-color: black;
   --delete-background-color: red;
   --delete-text-color: white;
+  --rename-background-color: rgb(0, 255, 85);
+  --rename-text-color: black;
+  --duplicate-background-color: rgb(0, 255, 85);
+  --dupicate-text-color: black;
   --list-background-color: yellow;
   --list-text-color: black;
+  --inactive-background-color: rgb(122, 122, 122);
+  --inactive-text-color: black;
   --large-font-size: 24pt;
   --small-font-size: 12pt;
   --error-background-color: red;
@@ -38,18 +46,18 @@
   --yes-text-color: white;
   --no-background-color: red;
   --no-text-color: white;
-  --submit-background-color:green;
+  --submit-background-color: green;
   --submit-text-color: white;
-  --ok-background-color:green;
+  --ok-background-color: green;
   --ok-text-color: white;
-  --cancel-background-color:red;
+  --cancel-background-color: red;
   --cancel-text-color: white;
   --modal-background-color: white;
-  --modal-header-background-color: green;
+  --modal-header-background-color: rgb(49, 175, 49);
   --modal-header-color: white;
   --modal-body-background-color: white;
   --modal-body-color: black;
-  --modal-footer-background-color: green;
+  --modal-footer-background-color: rgb(49, 175, 49);
   --modal-footer-color: white;
 }
 .layout {
@@ -78,11 +86,70 @@
     left: 0;
     width: 100%;
     display: grid;
-    grid-template-columns: 80px 1fr 80px;
-    grid-template-areas: "icon title .";
+    grid-template-columns: 80px 700px 1fr 780px;
+    grid-template-areas: "icon menu title .";
     gap: 0;
     .icon {
       grid-area: icon;
+    }
+    .menu {
+      grid-area: menu;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-areas: "note speed attack duration volume pan";
+      gap: 2px;
+      text-align: center;
+      font-size: var(--small-font-size);
+      background-color: var(--header-background-color);
+      .note {
+        grid-area: note;
+        display: block;
+        background-color: var(--menu-background-color);
+      color: var(--menu-text-color);
+      width: 80px;
+      height: 40px;
+      z-index: 2;
+      }
+      .speed {
+        grid-area: speed;
+        display: block;
+        background-color: var(--menu-background-color);
+      color: var(--menu-text-color);
+      width: 80px;
+      height: 40px;
+      }
+      .attack {
+        grid-area: attack;
+        display: block;
+        background-color: var(--menu-background-color);
+      color: var(--menu-text-color);
+      width: 80px;
+      height: 40px;
+      }
+      .duration {
+        grid-area: duration;
+        display: block;
+        background-color: var(--menu-background-color);
+      color: var(--menu-text-color);
+      width: 80px;
+      height: 40px;
+      }
+      .volume {
+        grid-area: volume;
+        display: block;
+        background-color: var(--menu-background-color);
+      color: var(--menu-text-color);
+      width: 80px;
+      height: 40px;
+      }
+      .pan {
+        grid-area: pan;
+        display: block;
+        background-color: var(--menu-background-color);
+      color: var(--menu-text-color);
+      width: 80px;
+      height: 40px;
+      }
     }
     .title {
       grid-area: title;
@@ -94,7 +161,7 @@
   .body {
     display: grid;
     grid-area: body;
-    grid-template-columns: 400px 1fr 400px;
+    grid-template-columns: 600px 1fr 600px;
     grid-template-areas: "sequence edit tag";
     gap: 0;
     width: 100%;
@@ -105,36 +172,35 @@
     }
     .edit {
       display: grid;
-      width: 50%;
+      width: 70%;
       grid-area: edit;
-      grid-template-rows: 100px 1fr 50px;
+      grid-template-rows: 40px 1fr 50px;
       grid-template-areas:
         "edit-header"
         "edit-body"
         "edit-footer";
       text-align: center;
-      align-self: center;
+      align-self: start;
+      margin-top: 100px;
       background-color: var(--edit-background-color);
       border: black;
       border-width: 2px;
       .edit-header {
         grid-area: edit-header;
         display: block;
-        width:100%;
-        text-align: left;
+        width: 100%;
+        text-align: center;
         background-color: var(--edit-header-background-color);
         color: var(--edit-header-text-color);
       }
       .edit-body {
         grid-area: edit-body;
         display: block;
-        width:100%;
-        height: 75%;
+        width: 100%;
+        height: 100%;
         text-align: left;
         background-color: var(--edit-body-background-color);
         color: var(--edit-body-text-color);
-    overflow: auto;
-    overflow-x: hidden;
       }
       .edit-footer {
         grid-area: edit-footer;
@@ -151,8 +217,8 @@
     .tag {
       display: block;
       grid-area: tag;
-    overflow: auto;
-    overflow-x: hidden;
+      overflow: auto;
+      overflow-x: hidden;
     }
   }
   .footer {
@@ -172,23 +238,38 @@
 .addbutton {
   background-color: var(--add-background-color);
   color: var(--add-text-color);
-  font-size: var(--small-font-size);
+  font-size: var(--large-font-size);
 }
 .editbutton {
   background-color: var(--modify-background-color);
   color: var(--modify-text-color);
   background-color: lightgreen;
-  font-size: var(--small-font-size);
+  font-size: var(--large-font-size);
 }
 .deletebutton {
   background-color: var(--delete-background-color);
   color: var(--delete-text-color);
-  font-size: var(--small-font-size);
+  font-size: var(--large-font-size);
+}
+.renamebutton {
+  background-color: var(--rename-background-color);
+  color: var(--delete-rename-color);
+  font-size: var(--large-font-size);
+}
+.duplicatebutton {
+  background-color: var(--duplicate-background-color);
+  color: var(--delete-duplicate-color);
+  font-size: var(--large-font-size);
 }
 .listbutton {
   background-color: var(--list-background-color);
   color: var(--list-text-color);
-  font-size: var(--small-font-size);
+  font-size: var(--large-font-size);
+}
+.inactivebutton {
+  background-color: var(--inactive-background-color);
+  color: var(--inactive-text-color);
+  font-size: var(--large-font-size);
 }
 .yesbutton {
   background-color: var(--yes-background-color);
@@ -244,6 +325,43 @@ p {
   font-size: var(--small-font-size);
   margin: 0;
 }
+a {
+  font-weight: 500;
+  background-color: var(--submit-background-color);
+  color: var(--submit-text-color);
+  text-decoration: inherit;
+  margin: 5px;
+}
+a:hover {
+  color: #535bf2;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+button {
+  border-radius: 8px;
+  border: 2px solid transparent;
+  margin: 0.1em 1.0em 0.1em 1.0em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: pink;
+}
+button:disabled {
+  background-color: lightgray;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
 
 .modal {
   position: absolute;
@@ -266,17 +384,17 @@ p {
   .modal-header {
     display: block;
     grid-area: modal-header;
-  background-color: var(--modal-header-background-color);
-  color: var(--modal-header-text-color);
-  font-size: var(--large-font-size);
+    background-color: var(--modal-header-background-color);
+    color: var(--modal-header-text-color);
+    font-size: var(--large-font-size);
     text-align: center;
   }
   .modal-body {
     display: block;
     grid-area: modal-body;
-  background-color: var(--modal-body-background-color);
-  color: var(--modal-body-text-color);
-  font-size: var(--small-font-size);
+    background-color: var(--modal-body-background-color);
+    color: var(--modal-body-text-color);
+    font-size: var(--small-font-size);
     text-align: left;
     overflow: auto;
     overflow-x: hidden;
@@ -284,9 +402,9 @@ p {
   .modal-footer {
     display: block;
     grid-area: modal-footer;
-  background-color: var(--modal-footer-background-color);
-  color: var(--modal-footer-text-color);
-  font-size: var(--large-font-size);
+    background-color: var(--modal-footer-background-color);
+    color: var(--modal-footer-text-color);
+    font-size: var(--large-font-size);
     width: 100%;
     top: auto;
     left: 0;

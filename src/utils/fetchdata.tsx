@@ -1,4 +1,4 @@
-import { RESPONSETYPE } from "../types";
+import { RESPONSETYPE } from "types";
 
 const url: string = `http://localhost:${import.meta.env.SERVERPORT}`;
 export default function fetchData(
