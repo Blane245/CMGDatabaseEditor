@@ -46,6 +46,16 @@ export enum Attribute {
   'pan' = 'pan',
 }
 export const Attributes: Attribute[] = [Attribute.none,Attribute.note, Attribute.speed, Attribute.attack, Attribute.duration, Attribute.volume, Attribute.pan];
+export enum FocusField {
+  'none' = '',
+  'note' = 'note',
+  'speed' = 'BPM',
+  'attack' = 'attack',
+  'duration' = 'duration',
+  'volume' = 'volume',
+  'pan' = 'pan',
+
+}
 export enum EDITMODE {
   "None" = "None",
   "Add" = "Add",

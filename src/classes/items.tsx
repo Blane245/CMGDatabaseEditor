@@ -8,15 +8,16 @@ import {
   NoteValue,
   PanValue,
   SpeedValue,
-  VolumeValue
+  VolumeValue,
 } from "../types";
 import checkNote from "utils/checknote";
 
 export class Item {
   id: string;
   type: Attribute = Attribute.none;
-  constructor(type: Attribute) {
-    this.id = randomId();
+  constructor(type: Attribute, id?: string) {
+    if (id) this.id = id;
+    else this.id = randomId();
     this.type = type;
   }
   validate(_item: AttributeValue): ErrorMessages {
@@ -43,23 +44,21 @@ export class Item {
 }
 export class NoteItem extends Item {
   note: string;
-  beats: number
-  constructor(note: string, beats: number) {
-    super(Attribute.note);
-    this.note =  note;
-    this.beats =  beats };
+  beats: number;
+  constructor(note: string, beats: number, id?: string) {
+    super(Attribute.note, id);
+    this.note = note;
+    this.beats = beats;
+  }
 
   override validate(item: NoteValue): ErrorMessages {
     const errors: string[] = [];
-    if (!checkNote(item.note))
-      errors.push("note is not in proper format");
-    if (item.beats <= 0)
-      errors.push("note duration must be greater than zero");
+    if (!checkNote(item.note)) errors.push("note is not in proper format");
+    if (item.beats <= 0) errors.push("note duration must be greater than zero");
     return errors;
   }
   override copy(): NoteItem {
-    const n: NoteItem = new NoteItem(this.note, this.beats);
-    n.id = this.id;
+    const n: NoteItem = new NoteItem(this.note, this.beats, this.id);
     return n;
   }
   override setAttribute(name: string, value: string): void {
@@ -89,10 +88,11 @@ export class NoteItem extends Item {
 export class SpeedItem extends Item {
   BPM: number;
   time: number;
-  constructor(BPM: number, time: number) {
-    super(Attribute.speed);
-    this.BPM =  BPM
-    this.time =  time }
+  constructor(BPM: number, time: number, id?: string) {
+    super(Attribute.speed, id);
+    this.BPM = BPM;
+    this.time = time;
+  }
 
   static validate(item: SpeedValue): string[] {
     const errors: string[] = [];
@@ -102,8 +102,7 @@ export class SpeedItem extends Item {
     return errors;
   }
   override copy(): SpeedItem {
-    const n: SpeedItem = new SpeedItem(this.BPM, this.time);
-    n.id = this.id;
+    const n: SpeedItem = new SpeedItem(this.BPM, this.time, this.id);
     return n;
   }
   override setAttribute(name: string, value: string): void {
@@ -118,9 +117,9 @@ export class SpeedItem extends Item {
       type: Attribute.speed,
       attributes: [
         {
-          name: "speed",
+          name: "BPM",
           dataType: "number",
-          title: "Speed",
+          title: "BPM",
           units: "BPM",
           min: 0 + Number.EPSILON,
         },
@@ -138,9 +137,9 @@ export class SpeedItem extends Item {
 export class AttackItem extends Item {
   attack: number;
   time: number;
-  constructor(attack: number, time: number) {
-    super(Attribute.attack);
-    this.attack = attack
+  constructor(attack: number, time: number, id?: string) {
+    super(Attribute.attack, id);
+    this.attack = attack;
     this.time = time;
   }
   static validate(item: AttackValue): string[] {
@@ -152,8 +151,7 @@ export class AttackItem extends Item {
     return errors;
   }
   override copy(): AttackItem {
-    const n: AttackItem = new AttackItem(this.attack, this.time);
-    n.id = this.id;
+    const n: AttackItem = new AttackItem(this.attack, this.time, this.id);
     return n;
   }
   override setAttribute(name: string, value: string): void {
@@ -170,7 +168,7 @@ export class AttackItem extends Item {
         {
           name: "attack",
           dataType: "number",
-          title: "attack",
+          title: "Attack",
           units: "[0-127]",
           min: 0,
           max: 127,
@@ -189,8 +187,8 @@ export class AttackItem extends Item {
 export class DurationItem extends Item {
   duration: number;
   time: number;
-  constructor(duration: number, time: number) {
-    super(Attribute.duration);
+  constructor(duration: number, time: number, id?: string) {
+    super(Attribute.duration, id);
     this.duration = duration;
     this.time = time;
   }
@@ -203,11 +201,7 @@ export class DurationItem extends Item {
     return errors;
   }
   override copy(): DurationItem {
-    const n: DurationItem = new DurationItem(
-      this.duration,
-      this.time
-    );
-    n.id = this.id;
+    const n: DurationItem = new DurationItem(this.duration, this.time, this.id);
     return n;
   }
   override setAttribute(name: string, value: string): void {
@@ -243,9 +237,9 @@ export class DurationItem extends Item {
 export class VolumeItem extends Item {
   volume: number;
   time: number;
-  constructor(volume: number, time: number) {
-    super(Attribute.volume);
-    this.volume = volume
+  constructor(volume: number, time: number, id?: string) {
+    super(Attribute.volume, id);
+    this.volume = volume;
     this.time = time;
   }
   static validate(item: VolumeValue): string[] {
@@ -257,8 +251,7 @@ export class VolumeItem extends Item {
     return errors;
   }
   override copy(): VolumeItem {
-    const n: VolumeItem = new VolumeItem(this.volume, this.time);
-    n.id = this.id;
+    const n: VolumeItem = new VolumeItem(this.volume, this.time, this.id);
     return n;
   }
   override setAttribute(name: string, value: string): void {
@@ -294,8 +287,8 @@ export class VolumeItem extends Item {
 export class PanItem extends Item {
   pan: number;
   time: number;
-  constructor(pan: number, time: number) {
-    super(Attribute.pan);
+  constructor(pan: number, time: number, id?: string) {
+    super(Attribute.pan, id);
     this.pan = pan;
     this.time = time;
   }
@@ -308,8 +301,7 @@ export class PanItem extends Item {
     return errors;
   }
   override copy(): PanItem {
-    const n: PanItem = new PanItem(this.pan, this.time);
-    n.id = this.id;
+    const n: PanItem = new PanItem(this.pan, this.time, this.id);
     return n;
   }
   override setAttribute(name: string, value: string): void {

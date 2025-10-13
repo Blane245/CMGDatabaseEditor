@@ -1,4 +1,1 @@
-sequence dialog  size and scroll bars need works
-actions button are not changing edit mode (no visibility by getActions on rowmodel )
-add sequence not putting row in edit mode (same problem)
-sequence dialog columns not updating when sequence type changes
+

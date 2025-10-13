@@ -19,11 +19,10 @@ import {
   DbSequenceListType,
   DbSequenceNamesType,
   EDITMODE,
-  ErrorMessage,
   MessageType,
   RESPONSETYPE,
   SequenceItem,
-  SequenceName,
+  SequenceName
 } from "../types";
 import Tags from "./tags";
 
@@ -60,10 +59,11 @@ export default function Sequences(props: SequencesProps): JSX.Element {
   useEffect(() => {
     console.log('sequence startup for ', sequenceType);
     fetchData(`/${sequenceType}`, "GET", null, setDbResponse);
-  }, []);
+  },[sequenceType]);
 
   // when a new response comes from the db handle those that apply here
   useEffect(() => {
+    setMessage({type:RESPONSETYPE.info,message:''});
     console.log(`${sequenceType}sequence received response`, dbResponse.type);
     switch (dbResponse.type) {
       case RESPONSETYPE.error:
@@ -444,7 +444,6 @@ export default function Sequences(props: SequencesProps): JSX.Element {
               setSequenceObject={setSequenceObject}
               mode={mode}
               setMode={setMode}
-              dbResponse={dbResponse}
               setDbResponse={setDbResponse}
             />
           </div>

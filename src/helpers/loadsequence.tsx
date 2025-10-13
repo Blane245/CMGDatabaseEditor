@@ -41,7 +41,7 @@ export default function loadSequence (
             else {
               obj.items = [];
               values.forEach((v) => {
-                const newItem = new NoteItem(v.note, v.beats);
+                const newItem = new NoteItem(v.note, v.beats, v.id);
                 obj.items.push(newItem);
               });
               setSequenceObject(obj);
@@ -64,7 +64,7 @@ export default function loadSequence (
             else {
               obj.items = [];
               values.forEach((v) => {
-                const newItem = new SpeedItem(v.BPM, v.time);
+                const newItem = new SpeedItem(v.BPM, v.time, v.id);
                 obj.items.push(newItem);
               });
               setSequenceObject(obj);
@@ -87,7 +87,7 @@ export default function loadSequence (
             else {
               obj.items = [];
               values.forEach((v) => {
-                const newItem = new AttackItem(v.attack, v.time);
+                const newItem = new AttackItem(v.attack, v.time, v.id);
                 obj.items.push(newItem);
               });
               setSequenceObject(obj);
@@ -110,7 +110,7 @@ export default function loadSequence (
             else {
               obj.items = [];
               values.forEach((v) => {
-                const newItem = new DurationItem(v.duration, v.time);
+                const newItem = new DurationItem(v.duration, v.time, v.id);
                 obj.items.push(newItem);
               });
               setSequenceObject(obj);
@@ -133,7 +133,7 @@ export default function loadSequence (
             else {
               obj.items = [];
               values.forEach((v) => {
-                const newItem = new VolumeItem(v.volume, v.time);
+                const newItem = new VolumeItem(v.volume, v.time, v.id);
                 obj.items.push(newItem);
               });
               setSequenceObject(obj);
@@ -156,7 +156,7 @@ export default function loadSequence (
             else {
               obj.items = [];
               values.forEach((v) => {
-                const newItem = new PanItem(v.pan, v.time);
+                const newItem = new PanItem(v.pan, v.time, v.id);
                 obj.items.push(newItem);
               });
               setSequenceObject(obj);

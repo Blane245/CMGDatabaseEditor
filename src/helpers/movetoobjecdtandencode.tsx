@@ -30,7 +30,7 @@ export default function moveToObjectandEncode (
         case Attribute.note: {
             const items: NoteItem[] = [];
             for (let i = 0; i < rows.length; i++) {
-                const newItem:NoteItem = new NoteItem(toTitleCase(rows[i].note), rows[i].beats);
+                const newItem:NoteItem = new NoteItem(toTitleCase(rows[i].note), rows[i].beats, rows[i].id);
                 items.push(newItem);
             }
             (sequenceObject as NoteSequence).items = [...items];
@@ -39,7 +39,7 @@ export default function moveToObjectandEncode (
         case Attribute.speed: {
             const items: SpeedItem[] = [];
             for (let i = 0; i < rows.length; i++) {
-                const newItem:SpeedItem = new SpeedItem(rows[i].note, rows[i].beats);
+                const newItem:SpeedItem = new SpeedItem(rows[i].BPM, rows[i].time, rows[i].id);
                 items.push(newItem);
             }
             (sequenceObject as SpeedSequence).items = [...items];
@@ -48,7 +48,7 @@ export default function moveToObjectandEncode (
         case Attribute.attack: {
             const items: AttackItem[] = [];
             for (let i = 0; i < rows.length; i++) {
-                const newItem:AttackItem = new AttackItem(rows[i].note, rows[i].beats);
+                const newItem:AttackItem = new AttackItem(rows[i].attack, rows[i].time, rows[i].id);
                 items.push(newItem);
             }
             (sequenceObject as AttackSequence).items = [...items];
@@ -57,7 +57,7 @@ export default function moveToObjectandEncode (
         case Attribute.duration: {
             const items: DurationItem[] = [];
             for (let i = 0; i < rows.length; i++) {
-                const newItem:DurationItem = new DurationItem(rows[i].note, rows[i].beats);
+                const newItem:DurationItem = new DurationItem(rows[i].duration, rows[i].time, rows[i].id);
                 items.push(newItem);
             }
             (sequenceObject as DurationSequence).items = [...items];
@@ -66,7 +66,7 @@ export default function moveToObjectandEncode (
         case Attribute.volume: {
             const items: VolumeItem[] = [];
             for (let i = 0; i < rows.length; i++) {
-                const newItem:VolumeItem = new VolumeItem(rows[i].note, rows[i].beats);
+                const newItem:VolumeItem = new VolumeItem(rows[i].volume, rows[i].time, rows[i].id);
                 items.push(newItem);
             }
             (sequenceObject as VolumeSequence).items = [...items];
@@ -75,7 +75,7 @@ export default function moveToObjectandEncode (
         case Attribute.pan: {
             const items: PanItem[] = [];
             for (let i = 0; i < rows.length; i++) {
-                const newItem:PanItem = new PanItem(rows[i].note, rows[i].beats);
+                const newItem:PanItem = new PanItem(rows[i].pan, rows[i].time, rows[i].id);
                 items.push(newItem);
             }
             (sequenceObject as PanSequence).items = [...items];

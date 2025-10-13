@@ -1,8 +1,12 @@
 import { Attribute, ItemProperties } from "types";
 import {
+  AttackItem,
+    DurationItem,
     Item,
     NoteItem,
-    SpeedItem
+    PanItem,
+    SpeedItem,
+    VolumeItem
 } from "classes/items";
 
 export default function getItemProperties(
@@ -14,13 +18,13 @@ export default function getItemProperties(
     case Attribute.speed:
       return SpeedItem.getProperties();
     case Attribute.attack:
-      return SpeedItem.getProperties();
+      return AttackItem.getProperties();
     case Attribute.duration:
-      return SpeedItem.getProperties();
+      return DurationItem.getProperties();
     case Attribute.volume:
-      return SpeedItem.getProperties();
+      return VolumeItem.getProperties();
     case Attribute.pan:
-      return SpeedItem.getProperties();
+      return PanItem.getProperties();
     default:
          return Item.getProperties();
   }

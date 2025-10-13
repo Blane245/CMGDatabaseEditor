@@ -42,11 +42,16 @@ export default function Tags(props: TagsProps): JSX.Element {
     switch (dbResponse.type) {
       case RESPONSETYPE.error:
         setMessage(dbResponse as MessageType);
-                  console.log('error is ', (dbResponse as DbErrorType).message);
-        
+        console.log("error is ", (dbResponse as DbErrorType).message);
+
         break;
       case RESPONSETYPE.taglist:
         setTagList((dbResponse as DbTagListType).value);
+        break;
+      // when the seqeunce list list is updated, get a refresh on the tag list
+      // since it may have changed
+      case RESPONSETYPE[`${sequenceType}sequencenamelist`]:
+          fetchData(`/tag`, "GET", null, setDbResponse);
         break;
       case RESPONSETYPE[`tag${sequenceType}sequencelist`]:
         if (tagName != "") {
@@ -137,9 +142,7 @@ export default function Tags(props: TagsProps): JSX.Element {
         </IconButton>
       </Tooltip>
       <Tooltip title={`List Tags`}>
-        <IconButton
-          onClick={()=>onListClick()}
-        >
+        <IconButton onClick={() => onListClick()}>
           <ListIcon fontSize="large" />
         </IconButton>
       </Tooltip>

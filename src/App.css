@@ -299,12 +299,12 @@
 .errormessage {
   background-color: var(--error-background-color);
   color: var(--error-text-color);
-  font-size: var(--large-font-size);
+  font-size: var(--small-font-size);
 }
 .infomessage {
   background-color: var(--info-background-color);
   color: var(--info-text-color);
-  font-size: var(--large-font-size);
+  font-size: var(--small-font-size);
 }
 label {
   font-size: var(--small-font-size);

@@ -72,7 +72,7 @@ export class NoteSequence extends Sequence {
     const values: NoteValue[] = JSON.parse(input);
     this.items = [];
     values.forEach((v) => {
-        this.items.push(new NoteItem(v.note, v.beats));
+        this.items.push(new NoteItem(v.note, v.beats, v.id));
     })
     // TODO make sure what is read are proper note items
     return {error:false, values: values};
@@ -84,7 +84,7 @@ export class NoteSequence extends Sequence {
 export class SpeedSequence extends Sequence {
   items: SpeedItem[] = [];
   constructor() {
-    super(Attribute.note);
+    super(Attribute.speed);
   }
 //   override add(item: SpeedItem) {
 //     this.items.push(item);
@@ -113,7 +113,7 @@ export class SpeedSequence extends Sequence {
     const values: SpeedValue[] = JSON.parse(input);
     this.items = [];
     values.forEach((v) => {
-        this.items.push(new SpeedItem(v.BPM, v.time));
+        this.items.push(new SpeedItem(v.BPM, v.time, v.id));
     })
     // TODO make sure what is read are proper speed items
     return {error:false, values: values};
@@ -125,7 +125,7 @@ export class SpeedSequence extends Sequence {
 export class AttackSequence extends Sequence {
   items: AttackItem[] = [];
   constructor() {
-    super(Attribute.note);
+    super(Attribute.attack);
   }
 //   override add(item: AttackItem) {
 //     this.items.push(item);
@@ -154,7 +154,7 @@ export class AttackSequence extends Sequence {
     const values: AttackValue[] = JSON.parse(input);
     this.items = [];
     values.forEach((v) => {
-        this.items.push(new AttackItem(v.attack, v.time));
+        this.items.push(new AttackItem(v.attack, v.time, v.id));
     })
     // TODO make sure what is read are proper speed items
     return {error:false, values: values};
@@ -166,7 +166,7 @@ export class AttackSequence extends Sequence {
 export class DurationSequence extends Sequence {
   items: DurationItem[] = [];
   constructor() {
-    super(Attribute.note);
+    super(Attribute.duration);
   }
 //   override add(item: DurationItem) {
 //     this.items.push(item);
@@ -195,7 +195,7 @@ export class DurationSequence extends Sequence {
     const values: DurationValue[] = JSON.parse(input);
     this.items = [];
     values.forEach((v) => {
-        this.items.push(new DurationItem(v.duration, v.time));
+        this.items.push(new DurationItem(v.duration, v.time, v.id));
     })
     // TODO make sure what is read are proper speed items
     return {error:false, values: values};
@@ -207,7 +207,7 @@ export class DurationSequence extends Sequence {
 export class VolumeSequence extends Sequence {
   items: VolumeItem[] = [];
   constructor() {
-    super(Attribute.note);
+    super(Attribute.volume);
   }
 //   override add(item: VolumeItem) {
 //     this.items.push(item);
@@ -236,7 +236,7 @@ export class VolumeSequence extends Sequence {
     const values: VolumeValue[] = JSON.parse(input);
     this.items = [];
     values.forEach((v) => {
-        this.items.push(new VolumeItem(v.volume, v.time));
+        this.items.push(new VolumeItem(v.volume, v.time, v.id));
     })
     // TODO make sure what is read are proper speed items
     return {error:false, values: values};
@@ -248,7 +248,7 @@ export class VolumeSequence extends Sequence {
 export class PanSequence extends Sequence {
   items: PanItem[] = [];
   constructor() {
-    super(Attribute.note);
+    super(Attribute.pan);
   }
 //   override add(item: PanItem) {
 //     this.items.push(item);
@@ -277,7 +277,7 @@ export class PanSequence extends Sequence {
     const values: PanValue[] = JSON.parse(input);
     this.items = [];
     values.forEach((v) => {
-        this.items.push(new PanItem(v.pan, v.time));
+        this.items.push(new PanItem(v.pan, v.time, v.id));
     })
     // TODO make sure what is read are proper speed items
     return {error:false, values: values};
