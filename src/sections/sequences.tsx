@@ -5,7 +5,7 @@ import RenameIcon from "@mui/icons-material/DriveFileRenameOutline";
 import ListIcon from "@mui/icons-material/List";
 import SearchIcon from "@mui/icons-material/Search";
 import { IconButton, Tooltip } from "@mui/material";
-import { Sequence } from "classes/sequences";
+import Sequence from "classes/sequences";
 import addSequence from "helpers/addsequence";
 import loadSequence from "helpers/loadsequence";
 import { JSX, useEffect, useState } from "react";
@@ -21,10 +21,8 @@ import {
   EDITMODE,
   MessageType,
   RESPONSETYPE,
-  SequenceItem,
-  SequenceName
+  SequenceName,
 } from "../types";
-import Tags from "./tags";
 
 interface SequencesProps {
   sequenceType: Attribute;
@@ -38,7 +36,7 @@ export default function Sequences(props: SequencesProps): JSX.Element {
 
   const [mode, setMode] = useState<EDITMODE>(EDITMODE.None);
   const [sequenceList, setSequenceList] = useState<SequenceName[]>([]);
-  const [sequenceSearchList, setSequenceSearchList] = useState<SequenceItem[]>(
+  const [sequenceSearchList, setSequenceSearchList] = useState<SequenceName[]>(
     []
   );
   const [editMessage, setEditMessage] = useState<MessageType>({
@@ -51,25 +49,24 @@ export default function Sequences(props: SequencesProps): JSX.Element {
   const [showDuplicate, setShowDuplicate] = useState<string>("");
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [showSearchList, setShowSearchList] = useState<boolean>(false);
-  // const [name, setName] = useState<string>("");
-  // const [value, setValue] = useState<string>("");
   const [searchTags, setSearchTags] = useState<string>("");
+
   // set up the sequence object and its properties whenever a new sequence type
   // is selected
   useEffect(() => {
-    console.log('sequence startup for ', sequenceType);
+    console.log("sequence startup for ", sequenceType);
     fetchData(`/${sequenceType}`, "GET", null, setDbResponse);
-  },[sequenceType]);
+  }, [sequenceType]);
 
   // when a new response comes from the db handle those that apply here
   useEffect(() => {
-    setMessage({type:RESPONSETYPE.info,message:''});
+    setMessage({ type: RESPONSETYPE.info, message: "" });
     console.log(`${sequenceType}sequence received response`, dbResponse.type);
     switch (dbResponse.type) {
       case RESPONSETYPE.error:
         {
           setMessage(dbResponse as MessageType);
-          console.log('error is ', (dbResponse as DbErrorType).message);
+          console.log("error is ", (dbResponse as DbErrorType).message);
         }
         break;
       case RESPONSETYPE[`${sequenceType}sequencenamelist`]:
@@ -96,12 +93,7 @@ export default function Sequences(props: SequencesProps): JSX.Element {
         break;
       case RESPONSETYPE[`${sequenceType}sequencevalue`]:
         {
-          loadSequence(
-            sequenceType,
-            dbResponse,
-            setEditMessage,
-            setSequenceObject
-          );
+          loadSequence(sequenceType, dbResponse, setSequenceObject);
 
           // enter modify mode once sequence object and attribute properties are loaded is loaded
           setMode(EDITMODE.Modify);
@@ -169,7 +161,7 @@ export default function Sequences(props: SequencesProps): JSX.Element {
       return;
     }
 
-    // send the rename tranaction
+    // send the duplicate tranaction
     fetchData(
       `/${sequenceType}/duplicate/${showDuplicate}?newname=${newSequenceName}`,
       "PUT",
@@ -278,7 +270,7 @@ export default function Sequences(props: SequencesProps): JSX.Element {
                 sequenceType
               )} sequences with tags ${searchTags}`}</div>
               <div className="modal-body">
-                {sequenceSearchList.map((s: SequenceItem) => (
+                {sequenceSearchList.map((s: SequenceName) => (
                   <>
                     <a
                       href="#"
@@ -436,27 +428,17 @@ export default function Sequences(props: SequencesProps): JSX.Element {
         ) : null}
       </div>
       {mode != EDITMODE.None && sequenceObject ? (
-        <>
-          <div className="edit">
-            <SequenceDialog
-              sequenceType={sequenceType}
-              sequenceObject={sequenceObject}
-              setSequenceObject={setSequenceObject}
-              mode={mode}
-              setMode={setMode}
-              setDbResponse={setDbResponse}
-            />
-          </div>
-        </>
+        <div className="edit">
+          <SequenceDialog
+            sequenceType={sequenceType}
+            sequenceObject={sequenceObject}
+            setSequenceObject={setSequenceObject}
+            mode={mode}
+            setMode={setMode}
+            setDbResponse={setDbResponse}
+          />
+        </div>
       ) : null}
-      <div className="tag">
-        <Tags
-          sequenceType={sequenceType}
-          setMessage={setMessage}
-          setDbResponse={setDbResponse}
-          dbResponse={dbResponse}
-        />
-      </div>
     </>
   );
 }

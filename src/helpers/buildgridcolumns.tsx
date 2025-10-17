@@ -1,28 +1,29 @@
 import {
-  GridActionsCellItem,
   GridColDef,
-  GridEditInputCell,
-  GridRowId,
-  GridRowModes,
-  GridRowModesModel,
+  GridEditInputCell
 } from "@mui/x-data-grid";
-import { AttributeProperty, ItemProperties } from "types";
+import { AttributeProperty } from "types";
 
 export default function buildGridColumns(
-  itemProperties: ItemProperties,
+  itemProperties: AttributeProperty[],
 ): GridColDef[] {
-  console.log('building columns');
   const columns: GridColDef[] = [];
-  itemProperties.attributes.forEach((attr: AttributeProperty) => {
+  itemProperties.forEach((property: AttributeProperty) => {
     columns.push({
-      field: attr.name,
-      headerName: `${attr.title} (${attr.units})`,
-      type: attr.dataType,
+      field: property.name,
+      headerName: `${property.title} ${property.units}`,
+      type: property.dataType,
       width: 200,
       align: "left",
       headerAlign: "left",
       disableColumnMenu: true,
       editable: true,
+      sortable: false,
+      renderEditCell: (params) => (
+        <GridEditInputCell {...params}
+        inputProps={{max:property.max, min:property.min}}
+        />
+      )
     });
   });
   return columns;

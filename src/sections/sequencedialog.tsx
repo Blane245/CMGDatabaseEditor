@@ -21,28 +21,25 @@ import {
 } from "@mui/x-data-grid";
 
 import { randomId } from "@mui/x-data-grid-generator";
-import { Sequence } from "classes/sequences";
+import Sequence from "classes/sequences";
 import buildGridColumns from "helpers/buildgridcolumns";
 import buildRowsandModel from "helpers/buildrowsandmodel";
 import getItemProperties from "helpers/getItemproperties";
-import moveToObjectandEncode from "helpers/movetoobjecdtandencode";
-import { JSX, useCallback, useEffect, useState } from "react";
+import moveToObjectandStringify from "helpers/movetoobjecdtandstringify";
+import newSequenceRecord from "helpers/newsequencerecord";
+import validateRow from "helpers/validaterow";
+import validateRows from "helpers/validaterows";
+import React, { JSX, useCallback, useEffect, useState } from "react";
 import fetchData from "utils/fetchdata";
 import toTitleCase from "utils/totitlecase";
 import {
   Attribute,
   DbErrorType,
+  EditItem,
   EDITMODE,
   ErrorMessage,
-  FocusField,
   RESPONSETYPE,
 } from "../types";
-// import validateRow from "helpers/validaterow";
-import { GridActionsColDef } from "@mui/x-data-grid";
-import { Item } from "classes/items";
-import { newSequenceRecord } from "helpers/newsequencerecord";
-import validateRow from "helpers/validaterow";
-import validateRows from "helpers/validaterows";
 declare module "@mui/x-data-grid" {
   interface ToolbarPropsOverrides {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -76,7 +73,7 @@ function EditToolbar(props: GridSlotProps["toolbar"]) {
         ...oldModel,
         [id]: {
           mode: GridRowModes.Edit,
-          fieldToFocus: FocusField[sequenceType],
+          fieldToFocus: "value",
         },
       };
       console.log("sd add row id, newModel", id, newModel);
@@ -103,12 +100,12 @@ function EditToolbar(props: GridSlotProps["toolbar"]) {
 
 const useValidation = () => {
   return useCallback(
-    (item: Partial<Item>, sequenceType: Attribute) =>
-      new Promise<Partial<Item>>((resolve, reject) => {
+    (editItem: Partial<EditItem>, sequenceType: Attribute) =>
+      new Promise<Partial<EditItem>>((resolve, reject) => {
         // validate the attribute item
-        const error: ErrorMessage = validateRow(sequenceType, item);
+        const error: ErrorMessage = validateRow(sequenceType, editItem);
         if (error != "") reject(new Error(error));
-        else resolve({ ...item });
+        else resolve({ ...editItem });
       }),
     []
   );
@@ -123,24 +120,13 @@ interface SequenceDialogProps {
   setDbResponse: Function;
 }
 
-// the editable datagrid for maintenance of the sequence name, tags, and value (sequnce rows)
-// the sequenceobject contains the array of sequenceitem objects that are used to build the rows
-// the itemproperties contains the array of properties of the items that is used to build the column definitions
 export default function SequenceDialog(
   props: SequenceDialogProps
 ): JSX.Element {
   const { sequenceType, sequenceObject, mode, setMode, setDbResponse } = props;
   const [name, setName] = useState<string>("");
   const [tags, setTags] = useState<string>("");
-  // whenever the rowmodelsmodel changes, the actions column need to change
-  // to address this new one
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-  
-  // Check if any rows are currently in edit mode
-  const hasRowsInEditMode = Object.values(rowModesModel).some(
-    (rowMode) => rowMode.mode === GridRowModes.Edit
-  );
-  
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [columns, setColumns] = useState<GridColDef[]>([]);
   const [disableTransaction, setDisableTransaction] = useState<boolean>(false);
@@ -149,15 +135,18 @@ export default function SequenceDialog(
     page: 0,
     pageSize: 10,
   });
-    const validateRow = useValidation();
-
-
-  // the popup after validating row edit
   const [snackbar, setSnackbar] = useState<Pick<
     AlertProps,
     "children" | "severity"
   > | null>(null);
+  const validateRow = useValidation();
+
   const handleCloseSnackbar = () => setSnackbar(null);
+
+  // Check if any rows are currently in edit mode
+  const hasRowsInEditMode = Object.values(rowModesModel).some(
+    (rowMode) => rowMode.mode === GridRowModes.Edit
+  );
 
   // the handlers for the row actions
   const handleEditClick = (id: GridRowId) => () => {
@@ -174,7 +163,10 @@ export default function SequenceDialog(
     setEditMessages([]);
     setRowModesModel((oldModel) => {
       if (oldModel[id].mode == GridRowModes.View) return oldModel;
-      const newModel = { ...oldModel, [id]: { mode: GridRowModes.View, isNew: false } };
+      const newModel = {
+        ...oldModel,
+        [id]: { mode: GridRowModes.View, isNew: false },
+      };
       console.log("sd save click id, newModel", newModel);
       return newModel;
     });
@@ -223,13 +215,11 @@ export default function SequenceDialog(
     );
     setRows(newRows);
     setRowModesModel(newModel);
-    // add the actions column
+
+    // add the data entry column
     const newColumns: GridColDef[] = buildGridColumns(
       getItemProperties(sequenceType)
     );
-
-    console.log("sd: columns defined", newColumns);
-
     setColumns(newColumns);
 
     console.log(
@@ -237,6 +227,7 @@ export default function SequenceDialog(
       sequenceType,
       sequenceObject,
       newRows,
+      newColumns,
       newModel
     );
   }, [sequenceType, sequenceObject]);
@@ -315,9 +306,8 @@ export default function SequenceDialog(
       return newColumns;
     });
 
-    // check the edit state if the row modes
-    setDisableTransaction(hasRowsInEditMode)
-    
+    // check the mode if any row modes are edit
+    setDisableTransaction(hasRowsInEditMode);
   }, [rowModesModel]);
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
@@ -329,7 +319,7 @@ export default function SequenceDialog(
     }
   };
 
-  // when the row changes flag it as not new
+  // when the row changes, validate it and then flag it as not new
   const processRowUpdate = useCallback(
     async (
       newRow: GridValidRowModel,
@@ -338,15 +328,18 @@ export default function SequenceDialog(
     ) => {
       const response = await validateRow(newRow, sequenceType);
       setSnackbar({ children: "Sequence entry accepted", severity: "success" });
-      console.log('sd processrowupdate - response', {...response, isNew: false})
-      
+      console.log("sd processrowupdate - response", {
+        ...response,
+        isNew: false,
+      });
+
       // Update the rows state with the validated row
       setRows((prevRows) => {
-        return prevRows.map((row) => 
+        return prevRows.map((row) =>
           row.id === params.rowId ? { ...response, isNew: false } : row
         );
       });
-      
+
       return { ...response, isNew: false };
     },
     [validateRow]
@@ -357,30 +350,30 @@ export default function SequenceDialog(
     setSnackbar({ children: error.message, severity: "error" });
   }, []);
 
-  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
-    console.log("sd on rowmodelsmodelchange newrowmodesmode", newRowModesModel);
-    setRowModesModel((oldModel: GridRowModesModel) => {
-      const newModel: GridRowModesModel = {...oldModel, ...newRowModesModel }
-      return newModel;
-    })
-    // setRowModesModel(newRowModesModel);
-  };
-
   function handleApply() {
-    // do the validation of the value and the time sequence
-    setRows((oldRows) => {
-      console.log(' sd apply rows', oldRows);
-      return oldRows;
-    })
-    const value: string = moveToObjectandEncode(
+    // move the edited rows to the db items
+    const itemsString: string = moveToObjectandStringify(
       sequenceType,
       [...rows],
       sequenceObject
     );
-    console.log("sd apply for sequence name, tags, value", name, tags, value);
-    // validate the attribute values and times
-    console.log("sd handle apply validating rows", rows);
+
+    console.log(
+      "sd apply for sequence name, rows, tags, items",
+      name,
+      rows,
+      tags,
+      itemsString
+    );
+
+    // validate the attribute values and times and name
     const errors: DbErrorType[] = validateRows(sequenceType, [...rows]);
+    const nameTrim: string = name.trim();
+    if (nameTrim == "")
+      errors.push({
+        type: RESPONSETYPE.error,
+        message: "Sequence Name must not be blank",
+      });
     setEditMessages(errors);
     if (errors.length > 0) {
       console.log("sd apply click, errors found");
@@ -389,9 +382,9 @@ export default function SequenceDialog(
 
     // add or modify the new record
     fetchData(
-      `/${sequenceType}/${name}?value=${encodeURIComponent(
-        value
-      )}&tags=${encodeURIComponent(tags)}`,
+      `/${sequenceType}/${nameTrim}` + 
+      `?items=${encodeURIComponent(itemsString)}` +
+      `&tags=${encodeURIComponent(tags)}`,
       mode == EDITMODE.Add ? "POST" : "PUT",
       null,
       setDbResponse
@@ -400,7 +393,9 @@ export default function SequenceDialog(
 
   return (
     <>
-      <div className="edit-header">{`${mode} Note Sequence Editor`}</div>
+      <div className="edit-header">{`${mode} ${toTitleCase(
+        sequenceType
+      )} Sequence Editor`}</div>
       <div className="edit-body">
         <label>
           Name:&nbsp;
@@ -422,33 +417,31 @@ export default function SequenceDialog(
         </label>
         <br />
         <div>
-          <div style={{width: '100%'}}>
-          <DataGrid
-            // pagination
-            paginationModel={paginationModel}
-            onPaginationModelChange={(model) => setPaginationModel(model)}
-            pageSizeOptions={[5, 10, 15, 20]}
-            editMode="row"
-            rows={rows}
-            columns={columns}
-            rowModesModel={rowModesModel}
-            onRowEditStop={handleRowEditStop}
-            // onRowModesModelChange={handleRowModesModelChange}
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-            processRowUpdate={processRowUpdate}
-            slots={{
-              toolbar: EditToolbar,
-            }}
-            slotProps={{
-              toolbar: {
-                setRows,
-                setRowModesModel,
-                sequenceType: sequenceType,
-                setEditMessages,
-              },
-            }}
-            showToolbar
-          />
+          <div style={{ width: "100%" }}>
+            <DataGrid
+              paginationModel={paginationModel}
+              onPaginationModelChange={(model) => setPaginationModel(model)}
+              pageSizeOptions={[5, 10, 15, 20]}
+              editMode="row"
+              rows={rows}
+              columns={columns}
+              rowModesModel={rowModesModel}
+              onRowEditStop={handleRowEditStop}
+              onProcessRowUpdateError={handleProcessRowUpdateError}
+              processRowUpdate={processRowUpdate}
+              slots={{
+                toolbar: EditToolbar,
+              }}
+              slotProps={{
+                toolbar: {
+                  setRows,
+                  setRowModesModel,
+                  sequenceType: sequenceType,
+                  setEditMessages,
+                },
+              }}
+              showToolbar
+            />
           </div>
           {!!snackbar && (
             <Snackbar
@@ -463,27 +456,28 @@ export default function SequenceDialog(
         </div>
       </div>
       <div className="edit-footer">
-        <button className="submitbutton" onClick={() => handleApply()} disabled={disableTransaction}>
+        <button
+          className="submitbutton"
+          onClick={() => handleApply()}
+          disabled={disableTransaction}
+        >
           {mode}
         </button>
         <button className="cancelbutton" onClick={() => setMode(EDITMODE.None)}>
           Cancel
         </button>
         <br />
-        {editMessages.map((message, i) => (
-          <>
+        {editMessages.map((em, i) => (
+          <React.Fragment key={`errormessage-${i}`}>
             <div
               className={
-                message.type == RESPONSETYPE.error
-                  ? "errormessage"
-                  : "infomessage"
+                em.type == RESPONSETYPE.error ? "errormessage" : "infomessage"
               }
-              key={`errormessage-${i}`}
             >
-              {message.message}
+              {em.message}
             </div>
             <br />
-          </>
+          </React.Fragment>
         ))}
       </div>
     </>

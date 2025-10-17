@@ -1,6 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import ListIcon from "@mui/icons-material/List";
 import { IconButton, Tooltip } from "@mui/material";
+import React from "react";
 import { JSX, useEffect, useState } from "react";
 import {
   Attribute,
@@ -16,6 +17,7 @@ import {
 } from "types";
 import fetchData from "utils/fetchdata";
 import toTitleCase from "utils/totitlecase";
+
 interface TagsProps {
   sequenceType: Attribute;
   setMessage: Function;
@@ -48,10 +50,10 @@ export default function Tags(props: TagsProps): JSX.Element {
       case RESPONSETYPE.taglist:
         setTagList((dbResponse as DbTagListType).value);
         break;
-      // when the seqeunce list list is updated, get a refresh on the tag list
+      // when the sequence list list is updated, get a refresh on the tag list
       // since it may have changed
       case RESPONSETYPE[`${sequenceType}sequencenamelist`]:
-          fetchData(`/tag`, "GET", null, setDbResponse);
+        fetchData(`/tag`, "GET", null, setDbResponse);
         break;
       case RESPONSETYPE[`tag${sequenceType}sequencelist`]:
         if (tagName != "") {
@@ -120,16 +122,13 @@ export default function Tags(props: TagsProps): JSX.Element {
     let total: number = 0;
     for (let i = 0; i < Attributes.length; i++) {
       const att: Attribute = Attributes[i];
-
-      if (att != Attribute.none) {
-        const count: number = item[`${att}_count`];
-        total += count;
-      }
+      const count: number = item[`${att}_count`];
+      total += count;
     }
     return total;
   }
   return (
-    <>
+    <div className="tag">
       <h1>Tags</h1>
       <Tooltip title={`Add Tag`}>
         <IconButton
@@ -170,9 +169,8 @@ export default function Tags(props: TagsProps): JSX.Element {
       ) : null}
       <hr />
       {tagList.map((item: TagItem) => (
-        <>
+        <React.Fragment  key={`tag-${item.name}`}>
           <a
-            key={`tag-${item.name}`}
             className={getTagClassName(item)}
             onClick={() => {
               onTagSequenceClick(item);
@@ -184,7 +182,7 @@ export default function Tags(props: TagsProps): JSX.Element {
             {`${item.name}(${getTagNameCount(item)})`}
           </a>
           <br />
-        </>
+        </React.Fragment>
       ))}
       {showDelete != "" ? (
         <div className="modal">
@@ -212,17 +210,16 @@ export default function Tags(props: TagsProps): JSX.Element {
           )} Sequences for tag '${tagName}' `}</div>
           <div className="modal-body">
             {sequenceNameList.map((item: SequenceName) => (
-              <>
+              <React.Fragment key={`sequence-${item.name}`}>
                 <a
                   className="editbutton"
                   href="#"
-                  key={`sequence-${item.name}`}
                   onClick={() => onSequenceClick(item.name)}
                 >
                   {item.name}
                 </a>
                 <br />
-              </>
+              </React.Fragment>
             ))}
           </div>
           <div className="modal-footer">
@@ -235,6 +232,6 @@ export default function Tags(props: TagsProps): JSX.Element {
           </div>
         </div>
       ) : null}
-    </>
+    </div>
   );
 }

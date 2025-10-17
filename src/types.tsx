@@ -1,4 +1,4 @@
-import { GridColDef, GridColType } from "@mui/x-data-grid";
+import { GridColType } from "@mui/x-data-grid";
 
 // the type that represent responses from the note_sequences database
 export enum RESPONSETYPE {
@@ -36,26 +36,15 @@ export enum RESPONSETYPE {
   "volumesequencesearchlist" = "volumesequencesearchlist",
   "pansequencesearchlist" = "pansequencesearchlist",
 }
-export enum Attribute {
-  'none' = 'none',
-  'note' = 'note',
-  'speed' = 'speed',
-  'attack' = 'attack',
-  'duration' = 'duration',
-  'volume' = 'volume',
-  'pan' = 'pan',
-}
-export const Attributes: Attribute[] = [Attribute.none,Attribute.note, Attribute.speed, Attribute.attack, Attribute.duration, Attribute.volume, Attribute.pan];
-export enum FocusField {
-  'none' = '',
-  'note' = 'note',
-  'speed' = 'BPM',
-  'attack' = 'attack',
-  'duration' = 'duration',
-  'volume' = 'volume',
-  'pan' = 'pan',
-
-}
+// export enum FocusField {
+//   "none" = "",
+//   "note" = "note",
+//   "speed" = "BPM",
+//   "attack" = "attack",
+//   "duration" = "duration",
+//   "volume" = "volume",
+//   "pan" = "pan",
+// }
 export enum EDITMODE {
   "None" = "None",
   "Add" = "Add",
@@ -85,18 +74,19 @@ export type DbSequenceNamesType = {
   type: RESPONSETYPE;
   value: SequenceName[];
 };
-export type SequenceItem = {
+export type SequenceType = {
+  id: string;
   name: string;
-  value: string;
+  items: string;
   tags: string;
 };
 export type DbSequenceType = {
-    type: RESPONSETYPE;
-    value: SequenceItem;
-}
+  type: RESPONSETYPE;
+  value: SequenceType;
+};
 export type DbSequenceListType = {
   type: RESPONSETYPE;
-  value: SequenceItem[];
+  value: SequenceName[];
 };
 export type DbResponseType =
   | DbErrorType
@@ -104,65 +94,164 @@ export type DbResponseType =
   | DbSequenceNamesType
   | DbSequenceListType
   | DbSequenceType
-  | MessageType
+  | MessageType;
 
 // type for messages on the UI
-  export type MessageType = {
+export type MessageType = {
   type: RESPONSETYPE;
   message: string;
 };
 
-export type ItemClass = {}
 export type AttributeProperty = {
-    name: string,
-      dataType: GridColType;
-      title: string,
-      units: string,
-      min?: number,
-      max?: number,
-}
-export type ItemProperties = {
-  type: Attribute;
   name: string;
-  class: ItemClass;
-  attributes: AttributeProperty[],
+  dataType: GridColType;
+  title: string;
+  units: string;
+  min: number;
+  max: number;
+};
+// export type ItemProperties = {
+//   type: Attribute;
+//   name: string;
+//   attributes: AttributeProperty[];
+// };
+export enum Attribute {
+  "none" = "none",
+  "note" = "note",
+  "speed" = "speed",
+  "attack" = "attack",
+  "duration" = "duration",
+  "volume" = "volume",
+  "pan" = "pan",
 }
+export const Attributes: Attribute[] = [
+  Attribute.none,
+  Attribute.note,
+  Attribute.speed,
+  Attribute.attack,
+  Attribute.duration,
+  Attribute.volume,
+  Attribute.pan,
+];
 
-export type ErrorMessage = string;
-export type ErrorMessages = ErrorMessage[];
-
-export type NoneValue = {
+export const itemProperties: Record<Attribute, AttributeProperty[]> = {
+  none: [
+    { name: "value", title: "", units: "", min: 0, max: 0, dataType: "string" },
+    { name: "beats", title: "", units: "", min: 0, max: 0, dataType: "string" },
+  ],
+  note: [
+    {
+      name: "value",
+      title: "Note",
+      units: "",
+      min: 0,
+      max: 127,
+      dataType: "string",
+    },
+    {
+      name: "beats",
+      title: "Beats",
+      units: "(0, 1000]",
+      min: Number.EPSILON,
+      max: 1000,
+      dataType: "number",
+    },
+  ],
+  speed: [
+    {
+      name: "value",
+      title: "BPM",
+      units: "(0,1000]",
+      min: Number.EPSILON,
+      max: 1000,
+      dataType: "number",
+    },
+    {
+      name: "beats",
+      title: "Beats",
+      units: "(0, 1000]",
+      min: Number.EPSILON,
+      max: 1000,
+      dataType: "number",
+    },
+  ],
+  attack: [
+    {
+      name: "value",
+      title: "Attack",
+      units: "[0,127]",
+      min: 0,
+      max: 127,
+      dataType: "number",
+    },
+    {
+      name: "beats",
+      title: "Beats",
+      units: "(0, 1000]",
+      min: Number.EPSILON,
+      max: 1000,
+      dataType: "number",
+    },
+  ],
+  duration: [
+    {
+      name: "value",
+      title: "Duration",
+      units: "(0,100]%",
+      min: Number.EPSILON,
+      max: 100,
+      dataType: "number",
+    },
+    {
+      name: "beats",
+      title: "Beats",
+      units: "(0, 1000]",
+      min: Number.EPSILON,
+      max: 1000,
+      dataType: "number",
+    },
+  ],
+  volume: [
+    {
+      name: "value",
+      title: "Volume",
+      units: "[-10,+10] dB",
+      min: -10,
+      max: 10,
+      dataType: "number",
+    },
+    {
+      name: "beats",
+      title: "Beats",
+      units: "(0, 1000]",
+      min: Number.EPSILON,
+      max: 1000,
+      dataType: "number",
+    },
+  ],
+  pan: [
+    {
+      name: "value",
+      title: "Pan",
+      units: "[-1,+1]",
+      min: -1,
+      max: 1,
+      dataType: "number",
+    },
+    {
+      name: "beats",
+      title: "Beats",
+      units: "(0, 1000]",
+      min: Number.EPSILON,
+      max: 1000,
+      dataType: "number",
+    },
+  ],
+};
+export type EditItem = {
   id: string;
-  type: Attribute;
-}
-export type NoteValue = {
-  id:string;
-  note: string;
+  value: number | string;
   beats: number;
 }
-export type SpeedValue = {
-  id:string;
-  BPM: number;
-  time: number;
-}
-export type AttackValue = {
-  id:string;
-  attack: number;
-  time: number;
-}
-export type DurationValue = {
-  id:string;
-  duration: number;
-  time: number;
-}
-export type VolumeValue = {
-  id:string;
-  volume: number;
-  time: number;
-}
-export type PanValue = {
-  id:string;
-  pan: number;
-  time: number;
-}
-export type AttributeValue = NoneValue | NoteValue | SpeedValue | AttackValue | DurationValue | VolumeValue | PanValue;
+export type ErrorMessage = string;
+export type ErrorMessages = ErrorMessage[];

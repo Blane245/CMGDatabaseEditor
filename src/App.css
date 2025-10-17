@@ -105,50 +105,50 @@
         grid-area: note;
         display: block;
         background-color: var(--menu-background-color);
-      color: var(--menu-text-color);
-      width: 80px;
-      height: 40px;
-      z-index: 2;
+        color: var(--menu-text-color);
+        width: 80px;
+        height: 40px;
+        z-index: 2;
       }
       .speed {
         grid-area: speed;
         display: block;
         background-color: var(--menu-background-color);
-      color: var(--menu-text-color);
-      width: 80px;
-      height: 40px;
+        color: var(--menu-text-color);
+        width: 80px;
+        height: 40px;
       }
       .attack {
         grid-area: attack;
         display: block;
         background-color: var(--menu-background-color);
-      color: var(--menu-text-color);
-      width: 80px;
-      height: 40px;
+        color: var(--menu-text-color);
+        width: 80px;
+        height: 40px;
       }
       .duration {
         grid-area: duration;
         display: block;
         background-color: var(--menu-background-color);
-      color: var(--menu-text-color);
-      width: 80px;
-      height: 40px;
+        color: var(--menu-text-color);
+        width: 80px;
+        height: 40px;
       }
       .volume {
         grid-area: volume;
         display: block;
         background-color: var(--menu-background-color);
-      color: var(--menu-text-color);
-      width: 80px;
-      height: 40px;
+        color: var(--menu-text-color);
+        width: 80px;
+        height: 40px;
       }
       .pan {
         grid-area: pan;
         display: block;
         background-color: var(--menu-background-color);
-      color: var(--menu-text-color);
-      width: 80px;
-      height: 40px;
+        color: var(--menu-text-color);
+        width: 80px;
+        height: 40px;
       }
     }
     .title {
@@ -344,7 +344,7 @@ td {
 button {
   border-radius: 8px;
   border: 2px solid transparent;
-  margin: 0.1em 1.0em 0.1em 1.0em;
+  margin: 0.1em 1em 0.1em 1em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -361,7 +361,6 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-
 
 .modal {
   position: absolute;

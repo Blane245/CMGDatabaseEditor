@@ -24,14 +24,15 @@ function App() {
   return (
     <div className="layout">
       <div className="header">
-        <Header 
-        setSequenceType={setSequenceType}
-        name={import.meta.env.NAME} 
-        version={import.meta.env.VERSION} />
+        <Header
+          setSequenceType={setSequenceType}
+          name={import.meta.env.NAME}
+          version={import.meta.env.VERSION}
+        />
       </div>
       <div className="body">
         <Body
-        sequenceType={sequenceType}
+          sequenceType={sequenceType}
           setMessage={setMessage}
           dbResponse={dbResponse}
           setDbResponse={setDbResponse}
