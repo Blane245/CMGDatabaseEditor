@@ -1,51 +1,38 @@
 import "App.css";
-import { useState } from "react";
+import { useEditorContext } from "CMGSequenceEditorContext";
 import Body from "sections/body";
 import Header from "sections/header";
 import {
-  Attribute,
-  DbErrorType,
-  DbResponseType,
   MessageType,
-  RESPONSETYPE,
+  RESPONSETYPE
 } from "./types";
+import { useEffect } from "react";
+import Footer from "sections/footer";
 
 function App() {
-  const [message, setMessage] = useState<MessageType>({
-    type: RESPONSETYPE.error,
-    message: "",
-  });
-  const [dbResponse, setDbResponse] = useState<DbResponseType>({
-    type: RESPONSETYPE.error,
-    message: "",
-  } as DbErrorType);
-  const [sequenceType, setSequenceType] = useState<Attribute>(Attribute.none);
+  const {
+    setMessage,
+    dbResponse
+  } = useEditorContext();
+  useEffect(() => {
+    if (dbResponse.type == RESPONSETYPE.error) {
+          setMessage(dbResponse as MessageType);
+  }
+}, [dbResponse]);
 
   return (
     <div className="layout">
       <div className="header">
         <Header
-          setSequenceType={setSequenceType}
           name={import.meta.env.NAME}
           version={import.meta.env.VERSION}
         />
       </div>
       <div className="body">
-        <Body
-          sequenceType={sequenceType}
-          setMessage={setMessage}
-          dbResponse={dbResponse}
-          setDbResponse={setDbResponse}
-        />
+        <Body/>
       </div>
       <div className="footer">
-        <p
-          className={
-            message.type == RESPONSETYPE.error ? "errormessage" : "infomessage"
-          }
-        >
-          {message.message}
-        </p>
+        <Footer/>
       </div>
     </div>
   );

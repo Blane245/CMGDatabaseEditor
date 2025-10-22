@@ -1,14 +1,15 @@
 import CMG2 from "assets/CGM2.svg";
+import { useEditorContext } from "CMGSequenceEditorContext";
 import { JSX } from "react";
 import { Attribute } from "types";
 
 interface HeaderProps {
   name: string;
   version: string;
-  setSequenceType: Function;
 }
 export default function Header(props: HeaderProps): JSX.Element {
-  const { name, version, setSequenceType } = props;
+  const {setSequenceType} = useEditorContext();
+  const { name, version } = props;
   return (
     <>
       <div className="icon">

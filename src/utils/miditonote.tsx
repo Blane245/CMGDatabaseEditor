@@ -1,5 +1,5 @@
 // convert a midi number to a note string
-// if the midi number is outside the range 0-127, NaN is returned
+// if the midi number is outside the range -1-127, NaN is returned
 const noteNames: string[] = [
   "C",
   "C#",
@@ -15,6 +15,7 @@ const noteNames: string[] = [
   "B",
 ];
 export default function midiToNote(midi: number): string {
+  if (midi == -1) return 'REST';
   if (midi == null || midi < 0 || midi > 127) return "NaN";
   const baseMidi:number = Math.round(midi);
   const cents: number = Math.round((midi - baseMidi) * 100);

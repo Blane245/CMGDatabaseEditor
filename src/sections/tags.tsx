@@ -1,31 +1,24 @@
 import AddIcon from "@mui/icons-material/Add";
 import ListIcon from "@mui/icons-material/List";
 import { IconButton, Tooltip } from "@mui/material";
-import React from "react";
-import { JSX, useEffect, useState } from "react";
+import { useEditorContext } from "CMGSequenceEditorContext";
+import React, { JSX, useEffect, useState } from "react";
 import {
   Attribute,
   Attributes,
   DbErrorType,
-  DbResponseType,
   DbSequenceNamesType,
   DbTagListType,
   MessageType,
   RESPONSETYPE,
   SequenceName,
-  TagItem,
+  TagItem
 } from "types";
 import fetchData from "utils/fetchdata";
 import toTitleCase from "utils/totitlecase";
 
-interface TagsProps {
-  sequenceType: Attribute;
-  setMessage: Function;
-  dbResponse: DbResponseType;
-  setDbResponse: Function;
-}
-export default function Tags(props: TagsProps): JSX.Element {
-  const { sequenceType, setMessage, dbResponse, setDbResponse } = props;
+export default function Tags(): JSX.Element {
+  const { sequenceType, setMessage, dbResponse, setDbResponse } = useEditorContext();
   const [showAdd, setShowAdd] = useState<boolean>(false);
   const [showDelete, setShowDelete] = useState<string>("");
   const [tagName, setTagName] = useState<string>("");

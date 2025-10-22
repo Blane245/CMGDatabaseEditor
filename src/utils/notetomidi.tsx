@@ -2,6 +2,7 @@
 // if the pattern doesn't match, return -1;
 const notePattern: RegExp = /([A-G,a-g])([#,b]?)(\d)([+-]\d\d)?/;
 export default function noteToMidi(note: string): number {
+  if (note.trim().toLocaleUpperCase() == 'REST') return -1;
   const match: RegExpExecArray | null = notePattern.exec(note);
   if (!match || match.length < 5) return -1;
   const noteName: string = match[1].toUpperCase();;

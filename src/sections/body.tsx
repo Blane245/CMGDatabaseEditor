@@ -2,31 +2,16 @@ import { JSX } from "react";
 import Sequences from "sections/sequences";
 import { Attribute, DbResponseType } from "types";
 import Tags from "./tags";
+import { useEditorContext } from "CMGSequenceEditorContext";
 
-interface BodyProps {
-  sequenceType: Attribute;
-  setMessage: Function;
-  dbResponse: DbResponseType;
-  setDbResponse: Function;
-}
-export default function Body(props: BodyProps): JSX.Element {
-  const { sequenceType, setMessage, setDbResponse, dbResponse } = props;
+export default function Body(): JSX.Element {
+  const { sequenceType, setMessage, setDbResponse, dbResponse } = useEditorContext();
   return (
     <>
       {sequenceType != Attribute.none ? (
         <>
-          <Sequences
-            sequenceType={sequenceType}
-            setMessage={setMessage}
-            setDbResponse={setDbResponse}
-            dbResponse={dbResponse}
-          />
-          <Tags
-            sequenceType={sequenceType}
-            setMessage={setMessage}
-            setDbResponse={setDbResponse}
-            dbResponse={dbResponse}
-          />
+          <Sequences/>
+          <Tags/>
         </>
       ) : null}
     </>
