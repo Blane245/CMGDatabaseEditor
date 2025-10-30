@@ -17,6 +17,7 @@ export function SequenceDelete(props: SequenceDeleteProps): JSX.Element {
   // delete the sequence
   const onDeleteSequence = (name: string): void => {
     fetchData(`/${sequenceType}/${name}`, "DELETE", null, setDbResponse);
+    setName("");
   };
   function onCancel() {
     setMessage({

@@ -119,6 +119,7 @@ export function SequenceDuplicate(props: SequenceDuplicateProps): JSX.Element {
       // request the new sequence list
       fetchData(`/${newSequenceType}`, "GET", null, setDbResponse);
     }
+    setName('');
   }
 
   return (
