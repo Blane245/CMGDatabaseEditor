@@ -1,6 +1,5 @@
 import Item from "classes/item";
 import { Attribute, EditItem, ErrorMessage } from "types";
-import checkNote from "utils/checknote";
 
 // validate the attribute fields.
 // all other fields are restrained by the min/max values

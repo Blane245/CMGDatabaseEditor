@@ -1,6 +1,6 @@
 // duplicate a sequence to the current or new sequencetype
 // the new sequence type list should be displayed
-import { useEditorContext } from "CMGSequenceEditorContext";
+import { useEditorContext } from "CMGdatabaseeditorcontext";
 import { JSX, useEffect, useState } from "react";
 import {
   Attribute,

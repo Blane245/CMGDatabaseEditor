@@ -1,6 +1,6 @@
 {
-  "name": "cmg_sequencer",
-  "title": "CMG Sequencer",
+  "name": "cmg_db_editor",
+  "title": "CMG DB Editor",
   "private": true,
   "version": "0.0.1",
   "type": "module",

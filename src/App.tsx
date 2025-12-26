@@ -1,5 +1,5 @@
 import "App.css";
-import { useEditorContext } from "CMGSequenceEditorContext";
+import { useEditorContext } from "CMGdatabaseeditorcontext";
 import Body from "sections/body";
 import Header from "sections/header";
 import {

@@ -1,4 +1,4 @@
-import { useEditorContext } from "CMGSequenceEditorContext";
+import { useEditorContext } from "CMGdatabaseeditorcontext";
 import { JSX } from "react";
 import { RESPONSETYPE } from "types";
 

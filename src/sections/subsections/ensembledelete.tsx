@@ -1,22 +1,21 @@
-// delete a named sequence after user confirmation
+// delete a named ensemble after user confirmation
 import { useEditorContext } from "CMGdatabaseeditorcontext";
 import { JSX } from "react";
 import { RESPONSETYPE } from "types";
 import fetchData from "utils/fetchdata";
-import toTitleCase from "utils/totitlecase";
 
-interface SequenceDeleteProps {
+interface DeleteProps {
   setName: Function;
   name: string;
 }
 
-export function SequenceDelete(props: SequenceDeleteProps): JSX.Element {
+export function EnsembleDelete(props: DeleteProps): JSX.Element {
   const { name, setName } = props;
-  const { sequenceType, setDbResponse, setMessage } = useEditorContext();
+  const { setDbResponse, setMessage } = useEditorContext();
 
-  // delete the sequence
-  const onDeleteSequence = (name: string): void => {
-    fetchData(`/${sequenceType}/${name}`, "DELETE", null, setDbResponse);
+  // delete the ensemble
+  const onDelete = (name: string): void => {
+    fetchData(`/ensemble/${name}`, "DELETE", null, setDbResponse);
     setName("");
   };
   function onCancel() {
@@ -28,19 +27,16 @@ export function SequenceDelete(props: SequenceDeleteProps): JSX.Element {
   }
 
   return (
+    <>
     <div className="modal">
-      <div className="modal-header">{`Confirm ${toTitleCase(
-        sequenceType
-      )} Sequence Deletion`}</div>
+      <div className="modal-header">Confirm Ensemble Deletion</div>
       <div className="modal-body">
-        {`Do you wish to delete the ${toTitleCase(
-          sequenceType
-        )} sequence '${name}'?`}
+        {`Do you wish to delete the '${name}' ensemble`}
       </div>
       <div className="modal-footer">
         <button
           className="yesbutton"
-          onClick={() => onDeleteSequence(name)}
+          onClick={() => onDelete(name)}
         >
           Yes
         </button>
@@ -49,5 +45,7 @@ export function SequenceDelete(props: SequenceDeleteProps): JSX.Element {
         </button>
       </div>
     </div>
+    {}
+    </>
   );
 }

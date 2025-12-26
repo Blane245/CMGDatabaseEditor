@@ -1,6 +1,6 @@
 // perform a search of the sequences from a user-supplied list of tags
 
-import { useEditorContext } from "CMGSequenceEditorContext";
+import { useEditorContext } from "CMGdatabaseeditorcontext";
 import { JSX, useEffect, useState } from "react";
 import {
   DbSequenceListType,
@@ -19,7 +19,7 @@ interface SequenceListProps {
 
 export function SequenceSearch(props: SequenceListProps): JSX.Element {
   const { setShowSearch } = props;
-  const { sequenceType, dbResponse, setDbResponse, setMessage, setMode } =
+  const { sequenceType, dbResponse, setDbResponse, setMessage, setEditMode} =
     useEditorContext();
   const [searchTags, setSearchTags] = useState<string>("");
   const [namePattern, setNamePattern] = useState<string>("");
@@ -66,7 +66,7 @@ export function SequenceSearch(props: SequenceListProps): JSX.Element {
   const onSequenceSearchClick = (name: string): void => {
     setShowSearchList(false);
     setShowSearch(false);
-    setMode(EDITMODE.None);
+    setEditMode(EDITMODE.None);
     fetchData(`/${sequenceType}/${name}`, "GET", null, setDbResponse);
   };
 

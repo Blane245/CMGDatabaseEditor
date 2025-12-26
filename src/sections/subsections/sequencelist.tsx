@@ -3,7 +3,7 @@ import DuplicateIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RenameIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { IconButton, Tooltip } from "@mui/material";
-import { useEditorContext } from "CMGSequenceEditorContext";
+import { useEditorContext } from "CMGdatabaseeditorcontext";
 import { JSX, useState } from "react";
 import { EDITMODE, RESPONSETYPE, SequenceName } from "types";
 import fetchData from "utils/fetchdata";
@@ -17,7 +17,7 @@ interface SequenceListProps {
 
 export function SequenceList(props: SequenceListProps): JSX.Element {
   const { sequenceList } = props;
-  const { setMode, sequenceType, setDbResponse, setMessage } =
+  const { setEditMode, sequenceType, setDbResponse, setMessage } =
     useEditorContext();
   const [deleteName, setDeleteName] = useState<string>("");
   const [renameName, setRenameName] = useState<string>("");
@@ -28,7 +28,7 @@ export function SequenceList(props: SequenceListProps): JSX.Element {
       type: RESPONSETYPE.info,
       message: "",
     });
-    setMode(EDITMODE.Modify);
+    setEditMode(EDITMODE.Modify);
     fetchData(`/${sequenceType}/${name}`, "GET", null, setDbResponse);
   }
 

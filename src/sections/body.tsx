@@ -1,19 +1,27 @@
+import { useEditorContext } from "CMGdatabaseeditorcontext";
 import { JSX } from "react";
-import Sequences from "sections/sequences";
-import { Attribute, DbResponseType } from "types";
-import Tags from "./tags";
-import { useEditorContext } from "CMGSequenceEditorContext";
+import { PARTITIONTYPE } from "types";
+import Ensembles from "./subsections/ensembles";
+import Sequences from "./subsections/sequences";
+import Tags from "./subsections/tags";
+import Voices from "./subsections/voices";
 
 export default function Body(): JSX.Element {
-  const { sequenceType, setMessage, setDbResponse, dbResponse } = useEditorContext();
+  const { partition } = useEditorContext();
   return (
     <>
-      {sequenceType != Attribute.none ? (
+      {!!(partition == PARTITIONTYPE.sequencer) &&(
         <>
-          <Sequences/>
-          <Tags/>
+          <Sequences />
+          <Tags />
         </>
-      ) : null}
+      )}
+      {!!(partition == PARTITIONTYPE.ensemble) &&(
+        <>
+          <Ensembles />
+          <Voices />
+        </>
+      )}
     </>
   );
 }

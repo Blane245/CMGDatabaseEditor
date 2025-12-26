@@ -3,6 +3,7 @@ interface ImportMetaEnv {
     readonly VERSION:string;
     readonly PORT:string;
     readonly NAME: string;
+    readonly SERVERPORT: string;
 }
 
 interface ImportMeta {

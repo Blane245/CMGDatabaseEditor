@@ -1,5 +1,5 @@
 // rename a sequence
-import { useEditorContext } from "CMGSequenceEditorContext";
+import { useEditorContext } from "CMGdatabaseeditorcontext";
 import { JSX, useState } from "react";
 import { MessageType, RESPONSETYPE, SequenceName } from "types";
 import fetchData from "utils/fetchdata";

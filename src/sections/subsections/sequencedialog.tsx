@@ -22,6 +22,7 @@ import {
 
 import { randomId } from "@mui/x-data-grid-generator";
 import Sequence from "classes/sequences";
+import { useEditorContext } from "CMGdatabaseeditorcontext";
 import buildGridColumns from "helpers/buildgridcolumns";
 import buildRowsandModel from "helpers/buildrowsandmodel";
 import getItemProperties from "helpers/getItemproperties";
@@ -39,7 +40,7 @@ import {
   EDITMODE,
   ErrorMessage,
   RESPONSETYPE,
-} from "../types";
+} from "../../types";
 declare module "@mui/x-data-grid" {
   interface ToolbarPropsOverrides {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -115,15 +116,13 @@ interface SequenceDialogProps {
   sequenceType: Attribute;
   sequenceObject: Sequence;
   setSequenceObject: Function;
-  mode: string;
-  setMode: Function;
-  setDbResponse: Function;
 }
 
 export default function SequenceDialog(
   props: SequenceDialogProps
 ): JSX.Element {
-  const { sequenceType, sequenceObject, mode, setMode, setDbResponse } = props;
+  const { sequenceType, sequenceObject, setSequenceObject } = props;
+  const { editMode, setEditMode, setDbResponse } = useEditorContext();
   const [name, setName] = useState<string>("");
   const [tags, setTags] = useState<string>("");
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -382,18 +381,24 @@ export default function SequenceDialog(
 
     // add or modify the new record
     fetchData(
-      `/${sequenceType}/${nameTrim}` + 
-      `?items=${encodeURIComponent(itemsString)}` +
-      `&tags=${encodeURIComponent(tags)}`,
-      mode == EDITMODE.Add ? "POST" : "PUT",
+      `/${sequenceType}/${nameTrim}` +
+        `?items=${encodeURIComponent(itemsString)}` +
+        `&tags=${encodeURIComponent(tags)}`,
+      editMode == EDITMODE.Add ? "POST" : "PUT",
       null,
       setDbResponse
     );
+    quit();
   }
+
+  const quit = () => {
+    setEditMode(EDITMODE.None);
+    setSequenceObject(null);
+  };
 
   return (
     <>
-      <div className="edit-header">{`${mode} ${toTitleCase(
+      <div className="edit-header">{`${editMode} ${toTitleCase(
         sequenceType
       )} Sequence Editor`}</div>
       <div className="edit-body">
@@ -402,7 +407,7 @@ export default function SequenceDialog(
           <input
             name="name"
             value={name}
-            disabled={mode == EDITMODE.Modify}
+            disabled={editMode == EDITMODE.Modify}
             onChange={(e) => setName(e.currentTarget.value)}
           />
         </label>
@@ -461,9 +466,9 @@ export default function SequenceDialog(
           onClick={() => handleApply()}
           disabled={disableTransaction}
         >
-          {mode}
+          {editMode}
         </button>
-        <button className="cancelbutton" onClick={() => setMode(EDITMODE.None)}>
+        <button className="cancelbutton" onClick={() => quit()}>
           Cancel
         </button>
         <br />

@@ -1,5 +1,5 @@
 import App from "App";
-import { EditorProvider } from "CMGSequenceEditorContext";
+import { EditorProvider } from "CMGdatabaseeditorcontext";
 import "index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

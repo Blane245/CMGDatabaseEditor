@@ -1,24 +1,25 @@
 import AddIcon from "@mui/icons-material/Add";
 import ListIcon from "@mui/icons-material/List";
 import { IconButton, Tooltip } from "@mui/material";
-import { useEditorContext } from "CMGSequenceEditorContext";
+import { useEditorContext } from "CMGdatabaseeditorcontext";
 import React, { JSX, useEffect, useState } from "react";
 import {
   Attribute,
   Attributes,
-  DbErrorType,
   DbSequenceNamesType,
   DbTagListType,
   MessageType,
+  PARTITIONTYPE,
   RESPONSETYPE,
   SequenceName,
-  TagItem
+  TagItem,
 } from "types";
 import fetchData from "utils/fetchdata";
 import toTitleCase from "utils/totitlecase";
 
 export default function Tags(): JSX.Element {
-  const { sequenceType, setMessage, dbResponse, setDbResponse } = useEditorContext();
+  const { sequenceType, setMessage, dbResponse, setDbResponse, partition } =
+    useEditorContext();
   const [showAdd, setShowAdd] = useState<boolean>(false);
   const [showDelete, setShowDelete] = useState<string>("");
   const [tagName, setTagName] = useState<string>("");
@@ -26,19 +27,16 @@ export default function Tags(): JSX.Element {
   const [sequenceNameList, setSequenceNameList] = useState<SequenceName[]>([]);
   const [showSequenceList, setShowSequenceList] = useState<boolean>(false);
 
-  // on startup show the tag list
+  //
   useEffect(() => {
     fetchData(`/tag`, "GET", null, setDbResponse);
   }, []);
 
   // when a response arrives from the database take the apporpriate action
   useEffect(() => {
-    console.log("tag received response", dbResponse.type);
     switch (dbResponse.type) {
       case RESPONSETYPE.error:
         setMessage(dbResponse as MessageType);
-        console.log("error is ", (dbResponse as DbErrorType).message);
-
         break;
       case RESPONSETYPE.taglist:
         setTagList((dbResponse as DbTagListType).value);
@@ -121,110 +119,115 @@ export default function Tags(): JSX.Element {
     return total;
   }
   return (
-    <div className="tag">
-      <h1>Tags</h1>
-      <Tooltip title={`Add Tag`}>
-        <IconButton
-          onClick={() => {
-            setTagName("");
-            setShowAdd(true);
-          }}
-        >
-          <AddIcon fontSize="large" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title={`List Tags`}>
-        <IconButton onClick={() => onListClick()}>
-          <ListIcon fontSize="large" />
-        </IconButton>
-      </Tooltip>
-      <br />
-      {showAdd ? (
-        <>
-          <input
-            type="text"
-            value={tagName}
-            onChange={(e) => setTagName(e.currentTarget.value)}
-          />
-          &nbsp;
-          <a href="#" className="okbutton" onClick={() => onAddClick()}>
-            OK
-          </a>
-          &nbsp;
-          <a
-            href="#"
-            className="cancelbutton"
-            onClick={() => setShowAdd(false)}
-          >
-            Cancel
-          </a>
-        </>
-      ) : null}
-      <hr />
-      {tagList.map((item: TagItem) => (
-        <React.Fragment  key={`tag-${item.name}`}>
-          <a
-            className={getTagClassName(item)}
-            onClick={() => {
-              onTagSequenceClick(item);
-            }}
-            aria-disabled={
-              getTotalTagSequenceCount(item) != 0 && getTagNameCount(item) == 0
-            }
-          >
-            {`${item.name}(${getTagNameCount(item)})`}
-          </a>
+    <>
+      {!!(partition == PARTITIONTYPE.sequencer) && (
+        <div className="secondary">
+          <h1>Tags</h1>
+          <Tooltip title={`Add Tag`}>
+            <IconButton
+              onClick={() => {
+                setTagName("");
+                setShowAdd(true);
+              }}
+            >
+              <AddIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={`List Tags`}>
+            <IconButton onClick={() => onListClick()}>
+              <ListIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
           <br />
-        </React.Fragment>
-      ))}
-      {showDelete != "" ? (
-        <div className="modal">
-          <div className="modal-header">Confirm Tag Deletion</div>
-          <div className="modal-body">
-            {`Do you wish to delete the tag '${showDelete}'?`}
-          </div>
-          <div className="modal-footer">
-            <button
-              className="yesbutton"
-              onClick={() => onDeleteTag(showDelete)}
-            >
-              Yes
-            </button>
-            <button className="nobutton" onClick={() => setShowDelete("")}>
-              No
-            </button>
-          </div>
-        </div>
-      ) : null}
-      {showSequenceList ? (
-        <div className="modal">
-          <div className="modal-header">{`List of ${toTitleCase(
-            sequenceType
-          )} Sequences for tag '${tagName}' `}</div>
-          <div className="modal-body">
-            {sequenceNameList.map((item: SequenceName) => (
-              <React.Fragment key={`sequence-${item.name}`}>
-                <a
-                  className="editbutton"
-                  href="#"
-                  onClick={() => onSequenceClick(item.name)}
+          {showAdd ? (
+            <>
+              <input
+                type="text"
+                value={tagName}
+                onChange={(e) => setTagName(e.currentTarget.value)}
+              />
+              &nbsp;
+              <a href="#" className="okbutton" onClick={() => onAddClick()}>
+                OK
+              </a>
+              &nbsp;
+              <a
+                href="#"
+                className="cancelbutton"
+                onClick={() => setShowAdd(false)}
+              >
+                Cancel
+              </a>
+            </>
+          ) : null}
+          <hr />
+          {tagList.map((item: TagItem) => (
+            <React.Fragment key={`tag-${item.name}`}>
+              <a
+                className={getTagClassName(item)}
+                onClick={() => {
+                  onTagSequenceClick(item);
+                }}
+                aria-disabled={
+                  getTotalTagSequenceCount(item) != 0 &&
+                  getTagNameCount(item) == 0
+                }
+              >
+                {`${item.name}(${getTagNameCount(item)})`}
+              </a>
+              <br />
+            </React.Fragment>
+          ))}
+          {showDelete != "" ? (
+            <div className="modal">
+              <div className="modal-header">Confirm Tag Deletion</div>
+              <div className="modal-body">
+                {`Do you wish to delete the tag '${showDelete}'?`}
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="yesbutton"
+                  onClick={() => onDeleteTag(showDelete)}
                 >
-                  {item.name}
-                </a>
-                <br />
-              </React.Fragment>
-            ))}
-          </div>
-          <div className="modal-footer">
-            <button
-              className="okbutton"
-              onClick={() => setShowSequenceList(false)}
-            >
-              Dismiss
-            </button>
-          </div>
+                  Yes
+                </button>
+                <button className="nobutton" onClick={() => setShowDelete("")}>
+                  No
+                </button>
+              </div>
+            </div>
+          ) : null}
+          {showSequenceList ? (
+            <div className="modal">
+              <div className="modal-header">{`List of ${toTitleCase(
+                sequenceType
+              )} Sequences for tag '${tagName}' `}</div>
+              <div className="modal-body">
+                {sequenceNameList.map((item: SequenceName) => (
+                  <React.Fragment key={`sequence-${item.name}`}>
+                    <a
+                      className="editbutton"
+                      href="#"
+                      onClick={() => onSequenceClick(item.name)}
+                    >
+                      {item.name}
+                    </a>
+                    <br />
+                  </React.Fragment>
+                ))}
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="okbutton"
+                  onClick={() => setShowSequenceList(false)}
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
-      ) : null}
-    </div>
+      )}
+    </>
   );
 }

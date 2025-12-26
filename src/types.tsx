@@ -1,6 +1,60 @@
 import { GridColType } from "@mui/x-data-grid";
 
-// the type that represent responses from the note_sequences database
+/**
+ * type to partition editing dialog
+ */
+export enum PARTITIONTYPE {
+  'none' = 'none,',
+  'ensemble' = 'ensemble',
+  'sequencer' ='sequencer'
+}
+/**
+ * Types matching the database table element structures
+ */
+export type EnsembleType = {
+    name: string;
+    description: string;
+    voices: string;
+
+}
+
+export type VoiceType = {
+    name: string;
+    description: string;
+    timbre: string;
+      registerLo: number;
+  registerHi: number;
+  intervalMean: number;
+  duration: number;
+  noiseFrequency: number;
+  noiseAmplitude: number;
+}
+
+export type EnsembleVoiceType = {
+  ensemble_name: string;
+  voice_name: string;
+}
+
+export type SequenceType = {
+  id: string;
+  name: string;
+  items: string;
+  tags: string;
+};
+
+export type TagType = {
+  name: string;
+}
+
+export type SequenceTagType = {
+  sequence_name: string;
+  sequence_type: string;
+  tag_name: string;
+}
+
+/**
+ * The type representing the responses from the CMG database server
+ */
 export enum RESPONSETYPE {
   "error" = "error",
   "info" = "info",
@@ -35,25 +89,26 @@ export enum RESPONSETYPE {
   "durationsequencesearchlist" = "durationsequencesearchlist",
   "volumesequencesearchlist" = "volumesequencesearchlist",
   "pansequencesearchlist" = "pansequencesearchlist",
+  "ensemblelist" = "ensemblelist",
+  "ensemble" = "ensemble",
+  "voicelist" = "voicelist",
+  "voice" = "voice",
 }
-// export enum FocusField {
-//   "none" = "",
-//   "note" = "note",
-//   "speed" = "BPM",
-//   "attack" = "attack",
-//   "duration" = "duration",
-//   "volume" = "volume",
-//   "pan" = "pan",
-// }
+
 export enum EDITMODE {
   "None" = "None",
   "Add" = "Add",
   "Modify" = "Modify",
 }
+
+/**
+ * database response structures
+ */
 export type DbErrorType = {
   type: RESPONSETYPE;
   message: string;
 };
+
 export type TagItem = {
   name: string;
   note_count: number;
@@ -63,38 +118,49 @@ export type TagItem = {
   volume_count: number;
   pan_count: number;
 };
+
 export type DbTagListType = {
   type: RESPONSETYPE;
   value: TagItem[];
 };
+
 export type SequenceName = {
   name: string;
 };
+
 export type DbSequenceNamesType = {
   type: RESPONSETYPE;
   value: SequenceName[];
 };
-export type SequenceType = {
-  id: string;
-  name: string;
-  items: string;
-  tags: string;
-};
+
 export type DbSequenceType = {
   type: RESPONSETYPE;
   value: SequenceType;
 };
+
 export type DbSequenceListType = {
   type: RESPONSETYPE;
   value: SequenceName[];
 };
-export type DbResponseType =
-  | DbErrorType
-  | DbTagListType
-  | DbSequenceNamesType
-  | DbSequenceListType
-  | DbSequenceType
-  | MessageType;
+
+export type DbEnsembleListType = {
+  type: RESPONSETYPE;
+  value: EnsembleType[];
+};
+
+export type DbEnsembleType = {
+  type: RESPONSETYPE;
+  value: EnsembleType;
+};
+
+export type DbVoiceListType = {
+  type: RESPONSETYPE;
+  value: VoiceType[];
+};
+export type DbVoiceType = {
+  type: RESPONSETYPE;
+  value: VoiceType;
+};
 
 // type for messages on the UI
 export type MessageType = {
@@ -102,7 +168,22 @@ export type MessageType = {
   message: string;
 };
 
-export type AttributeProperty = {
+export type DbResponseType =
+  | DbErrorType
+  | DbTagListType
+  | DbSequenceNamesType
+  | DbSequenceListType
+  | DbSequenceType
+  | DbEnsembleListType
+  | DbEnsembleType
+  | DbVoiceListType
+  | DbVoiceType
+  | MessageType;
+
+/**
+ * structures for sequence editing UI
+ */
+  export type AttributeProperty = {
   name: string;
   dataType: GridColType;
   title: string;
@@ -110,11 +191,7 @@ export type AttributeProperty = {
   min: number;
   max: number;
 };
-// export type ItemProperties = {
-//   type: Attribute;
-//   name: string;
-//   attributes: AttributeProperty[];
-// };
+
 export enum Attribute {
   "none" = "none",
   "note" = "note",
@@ -124,6 +201,7 @@ export enum Attribute {
   "volume" = "volume",
   "pan" = "pan",
 }
+
 export const Attributes: Attribute[] = [
   Attribute.none,
   Attribute.note,
@@ -253,5 +331,9 @@ export type EditItem = {
   value: number | string;
   beats: number;
 }
+
+/**
+ * UI Error messages
+ */
 export type ErrorMessage = string;
 export type ErrorMessages = ErrorMessage[];
