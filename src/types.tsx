@@ -1,4 +1,43 @@
 import { GridColType } from "@mui/x-data-grid";
+import { Preset } from "sfcomponents/types";
+import { SoundFont2 } from "soundfont2";
+
+export const DEFAULTLOCALSFURI: string = "/SoundFonts";
+export const SFFILELOCATION: string = "SFFileLocation";
+
+export type SFPromiseType = {
+  name: string;
+  soundFont: SoundFont2;
+};
+
+export enum ENTRYTYPE {
+  BlockDevice = "BlockDevice",
+  CharacterDevice = "CharacterDevice",
+  Directory = "Directory",
+  FIFO = "FIFO",
+  File = "File",
+  Socket = "Socket",
+  SymbolicLink = "SymbolicLink",
+  Unknown = "Unknown",
+}
+export type DirectoryEntry = {
+  name: string;
+  path: string;
+  type: ENTRYTYPE;
+};
+export type FileEntry = { data: Buffer; type: string };
+export type FSResponse = {
+  error: boolean;
+  status?: string;
+  list?: DirectoryEntry[];
+  file?: FileEntry;
+};
+export type DirectoryList = string[];
+export type FSEntry = {
+  mountPoint: string;
+  list: string[];
+};
+export type FSList = FSEntry[];
 
 /**
  * type to partition editing dialog
@@ -21,6 +60,9 @@ export type EnsembleType = {
 export type VoiceType = {
     name: string;
     description: string;
+    soundFontFile: string;
+    presetName: string;
+    preset: Preset;
     timbre: string;
       registerLo: number;
   registerHi: number;

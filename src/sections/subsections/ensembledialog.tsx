@@ -28,7 +28,8 @@ export default function EnsembleDialog(
   props: EnsembleDialogProps
 ): JSX.Element {
   const { ensemble, allVoices, allEnsembles, setEnsemble } = props;
-  const { dbResponse, setDbResponse, editMode, setEditMode } = useEditorContext();
+  const { SFFileList, dbResponse, setDbResponse, editMode, setEditMode } =
+    useEditorContext();
   const [formData, setFormData] = useState<Ensemble | null>(null);
   const [editMessages, setEditMessages] = useState<DbResponseType[]>([]);
   const [mouseDown, setMouseDown] = useState<boolean>(false);
@@ -40,14 +41,16 @@ export default function EnsembleDialog(
     setEditMessages([]);
 
     //Set selected for each of the voices in the ensemble
-    const selectList: HTMLElement | null = document.getElementById('ensemblevoicelist');
+    const selectList: HTMLElement | null =
+      document.getElementById("ensemblevoicelist");
     if (!selectList) return;
-    const options: HTMLOptionsCollection = (selectList as HTMLSelectElement).options;
+    const options: HTMLOptionsCollection = (selectList as HTMLSelectElement)
+      .options;
     for (let i = 0; i < options.length; i++) {
-      const value: string =  options[i].value;
-      const index: number = n.voices.findIndex((v)=> v == value);
-      options[i].selected = (index >=0);
-      }
+      const value: string = options[i].value;
+      const index: number = n.voices.findIndex((v) => v == value);
+      options[i].selected = index >= 0;
+    }
   }, [ensemble]);
 
   useEffect(() => {
@@ -60,7 +63,9 @@ export default function EnsembleDialog(
       ]);
   }, [dbResponse]);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ): void => {
     event.stopPropagation();
     event.preventDefault();
     const eventName: string = event.currentTarget.name;
@@ -70,7 +75,9 @@ export default function EnsembleDialog(
       if (prev) n = prev.copy();
       if (eventName == "name") {
         n.name = eventValue;
-      } else if (eventName == "description") n.description = eventValue;
+      } else if (eventName == "description") {
+        n.description = eventValue;
+      }
       return n;
     });
   };
@@ -101,11 +108,18 @@ export default function EnsembleDialog(
     let uri: string = `/ensemble/${formData.name}?`;
     uri += `description=${formData.description}&`;
     uri += `voices=${formData.voices.join(",")}`;
-    fetchData(uri, editMode == EDITMODE.Add ? "POST" : "PUT", null, setDbResponse);
+    fetchData(
+      uri,
+      editMode == EDITMODE.Add ? "POST" : "PUT",
+      null,
+      setDbResponse
+    );
     quit();
-    
   };
-  const quit = () => {setEditMode(EDITMODE.None);    setEnsemble(null);}
+  const quit = () => {
+    setEditMode(EDITMODE.None);
+    setEnsemble(null);
+  };
   const move = (event: MouseEvent<HTMLDivElement>) => {
     if (mouseDown) {
       const x: number = event.clientX;
@@ -151,7 +165,7 @@ export default function EnsembleDialog(
           Voices:&nbsp;&nbsp;&nbsp;
           <select
             name="voices"
-            id='ensemblevoicelist'
+            id="ensemblevoicelist"
             multiple
             size={allVoices.length}
             value={formData ? formData.voices : []}
@@ -168,11 +182,7 @@ export default function EnsembleDialog(
         <button type="button" onClick={handleApply}>
           {editMode}
         </button>
-        <button
-          className="cancelbutton"
-          type="button"
-          onClick={() => quit()}
-        >
+        <button className="cancelbutton" type="button" onClick={() => quit()}>
           Cancel
         </button>
       </div>

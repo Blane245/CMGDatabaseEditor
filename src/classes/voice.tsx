@@ -1,3 +1,4 @@
+import { Preset } from "sfcomponents/types";
 import { DbErrorType, ErrorMessage, RESPONSETYPE, VoiceType } from "types";
 
 export default class Voice {
@@ -6,27 +7,27 @@ export default class Voice {
   timbre: string = "sustained";
   registerLo: number = 0;
   registerHi: number = 0;
-  intervalMean: number = 0;
   duration: number = 0;
-  noiseFrequency: number = 0;
-  noiseAmplitude: number = 0;
+  soundFontFile: string = "";
+  presetName: string = "";
+  preset: Preset | undefined = undefined;
 
   copy(): Voice {
     const n: Voice = new Voice();
     n.name = this.name;
     n.description = this.description;
     n.duration = this.duration;
-    n.intervalMean = this.intervalMean;
-    n.noiseAmplitude = this.noiseAmplitude;
-    n.noiseFrequency = this.noiseFrequency;
     n.registerHi = this.registerHi;
     n.registerLo = this.registerLo;
     n.timbre = this.timbre;
+    n.presetName = this.presetName;
+    n.soundFontFile = this.soundFontFile
+    n.preset = this.preset;
     return n;
   }
   static validate(v: Voice, voices: VoiceType[]): DbErrorType[] {
     const e: DbErrorType[] = [];
-    if (v.name == "" || v.name.includes(","))
+    if (v.name.trim() == "" || v.name.includes(","))
       e.push({
         type: RESPONSETYPE.error,
         message: "Voice name must not be blank or contain commas",
@@ -36,7 +37,17 @@ export default class Voice {
         type: RESPONSETYPE.error,
         message: "Voice register is illformed",
       });
-    // if (voices.findIndex((voice) => v.name == voice.name) >= 0)
+    if (v.soundFontFile.trim() == "")
+      e.push({
+        type: RESPONSETYPE.error,
+        message: "Soundfont File must be specified",
+      });
+    if (v.presetName.trim() == "")
+      e.push({
+        type: RESPONSETYPE.error,
+        message: "Preset must be specified",
+      });
+   // if (voices.findIndex((voice) => v.name == voice.name) >= 0)
     //   e.push({
     //     type: RESPONSETYPE.error,
     //     message: "Voice name must be unique",

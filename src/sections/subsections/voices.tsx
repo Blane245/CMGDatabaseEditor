@@ -47,10 +47,10 @@ export default function Voices(): JSX.Element {
         const n: Voice = new Voice();
         n.name = data.name;
         n.description = data.description;
+        n.soundFontFile = data.soundFontFile;
+        n.presetName = data.presetName;
+        n.preset = data.preset;
         n.duration = data.duration;
-        n.intervalMean = data.intervalMean;
-        n.noiseAmplitude = data.noiseAmplitude;
-        n.noiseFrequency = data.noiseFrequency;
         n.registerHi = data.registerHi;
         n.registerLo = data.registerLo;
         n.timbre = data.timbre;

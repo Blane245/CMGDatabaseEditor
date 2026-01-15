@@ -1,15 +1,17 @@
 interface ImportMetaEnv {
-    [x: string]: any;
-    readonly VERSION:string;
-    readonly PORT:string;
-    readonly NAME: string;
-    readonly SERVERPORT: string;
+  [x: string]: any;
+  readonly VERSION: string;
+  readonly PORT: string;
+  readonly NAME: string;
+  readonly SERVERPORT: string;
+  readonly SERVERNAME: string;
+  readonly FSPORT: string;
 }
 
 interface ImportMeta {
-    readonly env: ImportMetaEnv;
+  readonly env: ImportMetaEnv;
 }
 declare module "*.svg" {
-    const content: string;
-    export default content;
+  const content: string;
+  export default content;
 }

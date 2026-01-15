@@ -57,6 +57,7 @@ export default function Ensembles(): JSX.Element {
         return;
       case RESPONSETYPE["voicelist"]:
         setVoiceList((dbResponse as DbVoiceListType).value);
+        fetchData(`/ensembles`, "GET", null, setDbResponse);
         return;
       default:
         return;

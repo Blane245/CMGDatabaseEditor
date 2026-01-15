@@ -17,6 +17,10 @@ import {
 } from "types";
 
 interface CMGDatabaseEditContextProps {
+  SFLocalDirectory: string;
+  setSFLocalDirectory: Dispatch<SetStateAction<string>>;
+  SFFileList: string[];
+  setSFFileList: Dispatch<SetStateAction<string[]>>;
   message: MessageType;
   setMessage: Dispatch<SetStateAction<MessageType>>;
   dbResponse: DbResponseType;
@@ -34,6 +38,8 @@ const EditContext = createContext<CMGDatabaseEditContextProps | undefined>(
 );
 
 export const EditorProvider = ({ children }: { children: ReactNode }) => {
+  const [SFLocalDirectory, setSFLocalDirectory] = useState<string>("");
+  const [SFFileList, setSFFileList] = useState<string[]>([]);
   const [message, setMessage] = useState<MessageType>({
     type: RESPONSETYPE.error,
     message: "",
@@ -47,6 +53,10 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
   const [partition, setPartition] = useState<PARTITIONTYPE>(PARTITIONTYPE.none);
 
   const contextValue = {
+    SFFileList,
+    setSFFileList,
+    SFLocalDirectory,
+    setSFLocalDirectory,
     message,
     setMessage,
     dbResponse,
