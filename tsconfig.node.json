@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
     "target": "ES2022",
     "lib": ["ES2023"],
     "module": "ESNext",
@@ -13,14 +12,12 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "jsx": "react",
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src","vite.config.ts", "vite-env.d.ts", "./package.json"]
+  "include": ["vite.config.ts", "*.js", "uninstall-service.cjs", "install-service.cjs"]
 }

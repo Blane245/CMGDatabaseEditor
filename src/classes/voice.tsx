@@ -1,5 +1,5 @@
 import { Preset } from "sfcomponents/types";
-import { DbErrorType, ErrorMessage, RESPONSETYPE, VoiceType } from "types";
+import { DbErrorType, RESPONSETYPE, VoiceType } from "types";
 
 export default class Voice {
   name: string = "";
@@ -25,7 +25,7 @@ export default class Voice {
     n.preset = this.preset;
     return n;
   }
-  static validate(v: Voice, voices: VoiceType[]): DbErrorType[] {
+  static validate(v: Voice, _voices: VoiceType[]): DbErrorType[] {
     const e: DbErrorType[] = [];
     if (v.name.trim() == "" || v.name.includes(","))
       e.push({

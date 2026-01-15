@@ -135,16 +135,6 @@ export default function VoiceDialog(props: VoiceDialogProps): JSX.Element {
     });
   };
 
-  const handleTimbreChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const option: string = event.currentTarget.selectedOptions[0].value;
-    setFormData((prev) => {
-      if (!prev) return prev;
-      const n: Voice = prev.copy();
-      n.timbre = option;
-      return n;
-    });
-  };
-
   const handleApply = () => {
     if (!formData) return;
     const e: DbErrorType[] = Voice.validate(formData, allVoices);

@@ -1,4 +1,4 @@
-import { DbErrorType, EnsembleType, ErrorMessages, RESPONSETYPE } from "types";
+import { DbErrorType, EnsembleType, RESPONSETYPE } from "types";
 
 // contains the name, description, and voices ensemble
 export default class Ensemble {
@@ -13,7 +13,7 @@ export default class Ensemble {
     n.voices = [...this.voices];
     return n;
   }
-  static validate(e: Ensemble, allEnsembles: EnsembleType[]): DbErrorType[] {
+  static validate(e: Ensemble, _allEnsembles: EnsembleType[]): DbErrorType[] {
     const errors: DbErrorType[] = [];
     if (e.name.trim() == "")
       errors.push({

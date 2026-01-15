@@ -3,9 +3,9 @@ import { useEditorContext } from "CMGdatabaseeditorcontext";
 import React, {
   ChangeEvent,
   JSX,
+  MouseEvent,
   useEffect,
   useState,
-  MouseEvent,
 } from "react";
 import fetchData from "utils/fetchdata";
 import {
@@ -28,7 +28,7 @@ export default function EnsembleDialog(
   props: EnsembleDialogProps
 ): JSX.Element {
   const { ensemble, allVoices, allEnsembles, setEnsemble } = props;
-  const { SFFileList, dbResponse, setDbResponse, editMode, setEditMode } =
+  const { dbResponse, setDbResponse, editMode, setEditMode } =
     useEditorContext();
   const [formData, setFormData] = useState<Ensemble | null>(null);
   const [editMessages, setEditMessages] = useState<DbResponseType[]>([]);

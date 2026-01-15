@@ -2,14 +2,16 @@
   "name": "cmg_db_editor",
   "title": "CMG DB Editor",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "author": "Bob Lane",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "service:install": "node install-service.cjs",
+    "service:uninstall": "node uninstall-service.cjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -34,6 +36,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.4.0",
+    "node-windows": "^1.0.0-beta.8",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.44.0",
     "vite": "^7.1.7",

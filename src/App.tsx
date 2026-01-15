@@ -8,14 +8,13 @@ import {
   RESPONSETYPE,
   SFFILELOCATION,
 } from "./types";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Footer from "sections/footer";
 import { getDirectoryList } from "utils/getdirectorylist";
 
 function App() {
   const { setSFLocalDirectory, setSFFileList, dbResponse, setMessage } =
     useEditorContext();
-  const [status, setStatus] = useState<string>("");
   useEffect(() => {
     let SFFileLocation: string | null =
       window.localStorage.getItem(SFFILELOCATION);
@@ -31,10 +30,10 @@ function App() {
         SFFileLocation,
         ["sf2", "SF2"],
         setSFFileList,
-        setStatus
+        setMessage
       );
     } catch (error) {
-      setStatus(error as string);
+      console.error(error);
     }
   }, []);
   useEffect(() => {
