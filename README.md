@@ -29,8 +29,6 @@ A sequence may be added with the above attributes. For each sequence, the follow
 All sequence type list use values that appropriate to the type, except note. For example, a pan item must be a number between -1 and +1, inclusive. In the case of notes,
 the value, accidental, octave, and cents are defined. The values are [a-g] or [A-G]. The accident is either b or # and is optional, The octave is 0 through 9. The cents, which are optional, are between -99 and +99. 
 
-
-
 # Ensemble Maintenance
 
 An ensemble is a list of voices that are used by the Stochastic generator in CMG to construct compositions, and generate sounds. An ensemble has a unique name, an optional descripion, and a list of voices used by the ensemble. Ensembles may be added, modified, or deleted. 

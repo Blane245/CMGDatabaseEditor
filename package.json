@@ -4,10 +4,18 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "author": "Bob Lane",
+  "author": {
+    "name": "Bob Lane",
+    "url": "https://github.com/Blane245"
+  },
+  "homepage": "https://blane-latitude-7290/cmgdbserver/",
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/Blane245/CMGDatabaseEditor"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build --base=/cmgdbeditor --mode=production",
     "lint": "eslint .",
     "preview": "vite preview",
     "service:install": "node install-service.cjs",
