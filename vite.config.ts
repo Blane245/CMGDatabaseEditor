@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
       "import.meta.env.VERSION": JSON.stringify(packageJson.version),
       "import.meta.env.PORT": JSON.stringify(3007),
       "import.meta.env.SERVERPORT": JSON.stringify(8081),
-      "import.meta.env.SERVERNAME": JSON.stringify("http://blane-latitude-7290"),
+      "import.meta.env.SERVERNAME": JSON.stringify("http://localhost"),
       "import.meta.env.FSPORT": JSON.stringify(6001),    },
     build: {
       manifest: true,
